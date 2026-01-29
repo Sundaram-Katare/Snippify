@@ -48,7 +48,7 @@ export const updateSnippet = async (req, res) => {
   try {
     const updated = await Snippet.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updated) return res.status(404).json({ error: "Snippet not found" });
-    res.json(updated);
+    res.json({ updated, message: "Snippet Updated successfully" });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
