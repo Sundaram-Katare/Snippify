@@ -11,7 +11,7 @@ export const createSnippet = async (req, res) => {
       userId: req.userId,
     });
 
-    console.log("Created Snippet:", snippet);
+    // console.log("Created Snippet:", snippet);
 
     const user = await User.findById(req.userId);
     user.snippets.push(snippet._id);
@@ -23,10 +23,9 @@ export const createSnippet = async (req, res) => {
   }
 };
 
-// @desc Get all snippets
 export const getSnippets = async (req, res) => {
   try {
-    const snippets = await Snippet.find({ userId: req.user.id });
+    const snippets = await Snippet.find({ userId: req.userId });
     res.json(snippets);
   } catch (err) {
     res.status(500).json({ error: err.message });
