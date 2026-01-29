@@ -7,13 +7,13 @@ import {
   updateSnippet,
   deleteSnippet
 } from "../controllers/snippetController.js";
+import { auth } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", createSnippet);       // Create
-router.get("/", getSnippets);          // Read all
-router.get("/:id", getSnippetById);    // Read one
-router.put("/:id", updateSnippet);     // Update
-router.delete("/:id", deleteSnippet);  // Delete
-
+router.post("/", auth, createSnippet);       // Create
+router.get("/", auth, getSnippets);          // Read all
+router.get("/:id", auth, getSnippetById);    // Read one
+router.put("/:id", auth, updateSnippet);     // Update
+router.delete("/:id", auth, deleteSnippet);  // Delete
 export default router;

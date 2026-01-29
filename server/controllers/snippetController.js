@@ -1,11 +1,23 @@
 // controllers/snippetController.js
 import Snippet from "../models/snippetModel.js";
+import User from "../models/userModel.js";
 
 // @desc Create snippet
 export const createSnippet = async (req, res) => {
   try {
-    const snippet = await Snippet.create(req.body);
-    res.status(201).json(snippet);
+    console.log(req.userId);
+    const snippet = await Snippet.create({
+      ...req.body,
+      userId: req.userId,
+    });
+
+    console.log("Created Snippet:", snippet);
+
+    const user = await User.findById(req.userId);
+    user.snippets.push(snippet._id);
+    await user.save();
+
+    res.status(200).json(snippet);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -14,7 +26,7 @@ export const createSnippet = async (req, res) => {
 // @desc Get all snippets
 export const getSnippets = async (req, res) => {
   try {
-    const snippets = await Snippet.find().sort({ createdAt: -1 });
+    const snippets = await Snippet.find({ userId: req.user.id });
     res.json(snippets);
   } catch (err) {
     res.status(500).json({ error: err.message });
