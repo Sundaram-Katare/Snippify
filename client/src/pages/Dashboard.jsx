@@ -9,7 +9,7 @@ export default function Dashboard() {
         <>
             <Navbar />
             <div className="flex flex-col md:flex-row gap-2">
-                <Sidebar />
+                {/* <Sidebar /> */}
                 {/* <Catolouge /> */}
                 <AddComponent />
             </div>
