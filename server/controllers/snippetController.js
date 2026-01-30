@@ -25,6 +25,7 @@ export const createSnippet = async (req, res) => {
 
 export const getSnippets = async (req, res) => {
   try {
+    console.log(req.userId);
     const snippets = await Snippet.find({ userId: req.userId });
     res.json(snippets);
   } catch (err) {

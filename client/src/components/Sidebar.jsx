@@ -6,7 +6,7 @@ import { Code, LayoutDashboard, Settings, User } from "lucide-react";
 export default function Sidebar({ isOpen, toggleSidebar }) {
   return (
     <div
-      className={`bg-gray-900 text-white h-full transition-all duration-300
+      className={`bg-gray-100 text-black h-full transition-all duration-300
         ${isOpen ? "w-64" : "w-16"} flex flex-col justify-between`}
     >
       {/* Top Section */}
@@ -25,22 +25,22 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
         <ul className="space-y-4 px-4 mt-6">
           <li>
-            <Link to="/dashboard" className="hover:text-[#61B8FF] block">
+            <Link to="/dashboard" className={` ${location.pathname === "/dashboard" ? "bg-[#E19FF5]" : ""} text-black rounded-md px-2 py-1 block`}>
               { isOpen ? "Dashboard" : <LayoutDashboard />}
             </Link>
           </li>
           <li>
-            <Link to="/settings" className="hover:text-[#61B8FF] block">
+            <Link to="/settings" className={` ${location.pathname === "/settings" ? "bg-[#E19FF5]" : ""} text-black rounded-md px-2 py-1 block`}>
               { isOpen ? "Settings" : <Settings />}
             </Link>
           </li>
           <li>
-            <Link to="/profile" className="hover:text-[#61B8FF] block">
+            <Link to="/profile" className={` ${location.pathname === "/profile" ? "bg-[#E19FF5]" : ""} text-black rounded-md px-2 py-1 block`}>
               { isOpen ? "Profile" : <User />}
             </Link>
           </li>
           <li>
-            <Link to={"/snippets"}>
+            <Link to={"/snippets"} className={` ${location.pathname === "/snippets" ? "bg-[#E19FF5]" : ""} text-black rounded-md px-2 py-1 block`}>
              { isOpen ? "Snippets" : <Code />}
             </Link>
           </li>
