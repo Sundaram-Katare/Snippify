@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { Code, LayoutDashboard, Settings, User } from "lucide-react";
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
   return (
@@ -24,18 +25,23 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
         <ul className="space-y-4 px-4 mt-6">
           <li>
-            <Link to="/" className="hover:text-[#61B8FF] block">
-              Dashboard
+            <Link to="/dashboard" className="hover:text-[#61B8FF] block">
+              { isOpen ? "Dashboard" : <LayoutDashboard />}
             </Link>
           </li>
           <li>
             <Link to="/settings" className="hover:text-[#61B8FF] block">
-              Settings
+              { isOpen ? "Settings" : <Settings />}
             </Link>
           </li>
           <li>
             <Link to="/profile" className="hover:text-[#61B8FF] block">
-              Profile
+              { isOpen ? "Profile" : <User />}
+            </Link>
+          </li>
+          <li>
+            <Link to={"/dashboard"}>
+             { isOpen ? "Snippets" : <Code />}
             </Link>
           </li>
         </ul>

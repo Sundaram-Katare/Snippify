@@ -20,7 +20,7 @@ function AppContent() {
   const { token } = useSelector((state) => state.auth);
 
   // Check if current route is NOT home page
-  const showSidebar = location.pathname !== "/";
+  const showSidebar = location.pathname !== "/" && location.pathname !== "/auth";
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 

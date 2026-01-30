@@ -7,7 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        inter: ["Inter", "Sans"]
+        inter: ["Inter", "Sans"],
+        pacifico: ['Pacifico', 'cursive'],
       }
     },
   },

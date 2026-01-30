@@ -19,7 +19,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between items-center px-4 py-6 bg-gray-900 text-white">
+    <nav className="flex justify-between items-center px-4 py-6 bg-transparent text-black">
       <h1 className="text-2xl md:text-4xl font-bold text-[#61B8FF]">Snippify</h1>
 
       {isAuthenticated ? (

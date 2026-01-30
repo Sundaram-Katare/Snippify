@@ -21,14 +21,13 @@ export default function Dashboard() {
     if (loading) return <p>Loading profile...</p>;
     return (
         <>
-            <Navbar />
-            <div className="flex flex-col md:flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-2 min-h-screen justify-center p-16 ">
                 {/* <Sidebar />
                 {/* <Catolouge /> */}
                 {/* <AddComponent /> */}
 
-                <h1 className="text-6xl font-cursive font-semibold text-black text-center">
-                   Hi {user?.name}
+                <h1 className="text-6xl font-pacifico font-semibold text-black text-center">
+                   Hello {user?.name}
                 </h1>
 
             </div>
