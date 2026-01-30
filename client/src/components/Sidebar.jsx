@@ -1,37 +1,49 @@
-export default function Sidebar() {
+import React from "react";
+import { Link } from "react-router-dom";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+
+export default function Sidebar({ isOpen, toggleSidebar }) {
   return (
-    <div className="bg-gradient-to-br from-gray-300 to-gray-400 text-black flex flex-col gap-12 p-12 h-800 w-[340px] rounded-3xl shadow-2xl">
-      <div className="flex flex-col items-center gap-5">
-        <h1 className="bg-blue-500 px-5 py-3 rounded-2xl text-white text-2xl font-bold shadow-sm">
-          Snippify
-        </h1>
-      </div>
+    <div
+      className={`bg-gray-900 text-white h-full transition-all duration-300
+        ${isOpen ? "w-64" : "w-16"} flex flex-col justify-between`}
+    >
+      {/* Top Section */}
       <div>
-        <h2 className="bg-gray-800 px-4 py-2 text-white rounded-xl font-inter mb-8 text-xl font-semibold shadow">
-          Quick Links
-        </h2>
-        <ul className="list-none space-y-8 font-inter text-lg">
+        <div className="relative flex items-center justify-between px-4 py-6">
+          <h1 className={`text-[#61B8FF] font-bold text-xl transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0"}`}>
+            Snippify
+          </h1>
+          <button
+            onClick={toggleSidebar}
+            className={`text-[#61B8FF] text-xl ${!isOpen ? "absolute left-0": ""}`}
+          >
+            {isOpen ? <FiChevronLeft size={36} color="orange" /> : <FiChevronRight size={36} color="orange" />}
+          </button>
+        </div>
+
+        <ul className="space-y-4 px-4 mt-6">
           <li>
-            <button className="w-full bg-blue-100 text-blue-700 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition font-semibold shadow">
-              All Snippets
-            </button>
+            <Link to="/" className="hover:text-[#61B8FF] block">
+              Dashboard
+            </Link>
           </li>
           <li>
-            <button className="w-full bg-blue-100 text-blue-700 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition font-semibold shadow">
-              Favourites
-            </button>
+            <Link to="/settings" className="hover:text-[#61B8FF] block">
+              Settings
+            </Link>
           </li>
           <li>
-            <button className="w-full bg-blue-100 text-blue-700 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition font-semibold shadow">
-              Trash
-            </button>
-          </li>
-          <li>
-            <button className="w-full bg-blue-100 text-blue-700 py-3 rounded-xl hover:bg-red-600 hover:text-white transition font-semibold shadow">
-              Logout
-            </button>
+            <Link to="/profile" className="hover:text-[#61B8FF] block">
+              Profile
+            </Link>
           </li>
         </ul>
+      </div>
+
+      {/* Bottom Section */}
+      <div className="px-4 py-6 text-sm text-gray-400">
+        {isOpen ? "Save it once, use it forever." : "💾"}
       </div>
     </div>
   );

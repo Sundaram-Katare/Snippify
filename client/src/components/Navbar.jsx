@@ -19,12 +19,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between px-4 py-6">
-      <h1 className="text-4xl font-bold text-[#61B8FF]">Snippify</h1>
+    <nav className="flex justify-between items-center px-4 py-6 bg-gray-900 text-white">
+      <h1 className="text-2xl md:text-4xl font-bold text-[#61B8FF]">Snippify</h1>
 
       {isAuthenticated ? (
         <div className="flex items-center gap-3">
-          <h2>Hello, <span className="font-semibold">{user?.name}</span></h2>
+          <h2>
+            Hello, <span className="font-semibold">{user?.name}</span>
+          </h2>
 
           <button
             onClick={seeProfile}
