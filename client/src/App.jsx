@@ -11,6 +11,7 @@ import AuthRoute from "./components/AuthRoute";
 import Profile from "./pages/Profile";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
+import Snippets from "./pages/Snippets";
 
 // Create a wrapper component to handle sidebar logic
 function AppContent() {
@@ -40,6 +41,7 @@ function AppContent() {
           <Route path="/auth" element={<AuthRoute><Signup /></AuthRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/snippets" element={<Snippets />} />
         </Routes>
       </div>
     </div>

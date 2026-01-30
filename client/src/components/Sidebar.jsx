@@ -40,7 +40,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
             </Link>
           </li>
           <li>
-            <Link to={"/dashboard"}>
+            <Link to={"/snippets"}>
              { isOpen ? "Snippets" : <Code />}
             </Link>
           </li>
