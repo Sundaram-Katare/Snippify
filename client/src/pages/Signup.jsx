@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { signupUser } from "../features/auth/authSlice"; // import thunk
+import { signupUser, loginUser } from "../features/auth/authSlice"; // import both thunks
 import Dashboard from "./Dashboard.jsx";
 
 export default function Signup() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [isRegister, setIsRegister] = useState(true); // toggle between signup/login
   const dispatch = useDispatch();
   const { user, token, loading, error } = useSelector((state) => state.auth);
 
@@ -14,9 +15,7 @@ export default function Signup() {
     const savedToken = localStorage.getItem("token");
     const savedUser = localStorage.getItem("user");
     if (savedToken && savedUser && !user) {
-      // rehydrate Redux state manually if needed
-      // you can dispatch a custom action like `setUser`
-      // or handle it in your slice initialization
+      // optional: dispatch(setUser(JSON.parse(savedUser)))
     }
   }, [user]);
 
@@ -26,10 +25,14 @@ export default function Signup() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(signupUser(formData));
+    if (isRegister) {
+      dispatch(signupUser(formData));
+    } else {
+      dispatch(loginUser({ email: formData.email, password: formData.password }));
+    }
   };
 
-  // ✅ If user is signed up and token exists, show Dashboard
+  // ✅ If user is signed up/logged in and token exists, show Dashboard
   if (token && user) {
     return <Dashboard />;
   }
@@ -38,22 +41,24 @@ export default function Signup() {
     <div className="min-h-screen grid grid-cols-2 gap-10 p-4 m-5 bg-gray-100/40">
       <div className="flex flex-col rounded-2xl p-6">
         <form onSubmit={onSubmit} className="max-w-md p-6 mt-10 space-y-4">
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="p-2"
-          >
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={onChange}
-              placeholder="Name"
-              className="w-full px-4 py-2 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </motion.div>
+          {isRegister && (
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="p-2"
+            >
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={onChange}
+                placeholder="Name"
+                className="w-full px-4 py-2 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -97,11 +102,21 @@ export default function Signup() {
             disabled={loading}
             className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
           >
-            {loading ? "Signing up..." : "Sign Up"}
+            {loading ? (isRegister ? "Signing up..." : "Logging in...") : isRegister ? "Sign Up" : "Login"}
           </motion.button>
         </form>
 
         {error && <p className="text-red-500 mt-2">{error}</p>}
+
+        <p className="text-black font-semibold font-inter mt-2">
+          {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
+          <span
+            className="text-blue-500 cursor-pointer"
+            onClick={() => setIsRegister(!isRegister)}
+          >
+            {isRegister ? "Login" : "Sign Up"}
+          </span>
+        </p>
       </div>
 
       <div className="flex flex-col bg-[#375AE6] rounded-2xl p-6">

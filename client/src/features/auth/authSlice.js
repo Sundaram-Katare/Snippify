@@ -3,11 +3,11 @@ import axios from "axios";
 
 
 const initialState = {
-  user: localStorage.getItem('user'),
-  token: localStorage.getItem("token"), // 👈 IMPORTANT
+  user: null,
+  token: localStorage.getItem("token"),
+  isAuthenticated: !!localStorage.getItem("token"),
   loading: false,
   error: null,
-  isAuthenticated: !!localStorage.getItem("token"),
 };
 
 export const signupUser = createAsyncThunk(
@@ -16,6 +16,7 @@ export const signupUser = createAsyncThunk(
     try {
       const response = await axios.post("http://localhost:3000/api/auth/signup", userData);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem('user', response.data);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data.message);
@@ -23,12 +24,36 @@ export const signupUser = createAsyncThunk(
   }
 );
 
+export const getProfile = createAsyncThunk(
+  "auth/profile",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get(
+        "http://localhost:3000/api/auth/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return res.data.user; // { name, email, id }
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message);
+    }
+  }
+);
+
+
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await axios.post("http://localhost:3000/api/auth/login", credentials);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem('user', response.data);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data.message);
@@ -83,6 +108,20 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(getProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase(getProfile.rejected, (state) => {
+        state.loading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+        localStorage.removeItem("token");
       });
   },
 });
