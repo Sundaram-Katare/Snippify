@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createSnippet, getSnippets } from "../features/snippets/snippetSlice.js";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
+import { Link } from "react-router-dom";
 
 // theme
 import "prismjs/themes/prism-tomorrow.css";
@@ -285,15 +286,14 @@ function SnippetCard({ snippet }) {
       {/* Actions */}
       <div className="flex items-center justify-between mt-4">
         {/* View */}
-        <a
-          href={`/snippets/${snippet._id}`}
+        <Link
+          to={`/snippets/${snippet._id}`}
           target="_blank"
-          rel="noopener noreferrer"
           className="text-sm font-semibold px-3 py-1.5 
             rounded-md bg-blue-600 hover:bg-blue-700 transition"
         >
           View
-        </a>
+        </Link>
 
         {/* Add tag */}
         {!addingTag ? (

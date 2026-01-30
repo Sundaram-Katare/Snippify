@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Snippets from "./pages/Snippets";
+import SnippetDetail from "./pages/SnippetDetail";
 
 // Create a wrapper component to handle sidebar logic
 function AppContent() {
@@ -38,6 +39,7 @@ function AppContent() {
         <Navbar toggleSidebar={toggleSidebar} />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/snippets/:id" element={<SnippetDetail />} />
           <Route path="/auth" element={<AuthRoute><Signup /></AuthRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Async thunk for creating a snippet
 export const createSnippet = createAsyncThunk(
-  "snippet/create",
+  "snippets/create",
   async ({ formData, token }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
@@ -21,12 +21,13 @@ export const createSnippet = createAsyncThunk(
 );
 
 export const getSnippets = createAsyncThunk(
-    "snippet/get",
-    async (_, { rejectWithValue }) => {
+    "snippets/get",
+    async ( { token }, { rejectWithValue }) => {
         try {
           const response = await axios.get("http://localhost:3000/api/snippets", {
             headers: { Authorization: `Bearer ${token}` }
           });
+
           console.log(response);
           return response.data;
         } catch (err) {
@@ -35,10 +36,25 @@ export const getSnippets = createAsyncThunk(
     }
 );
 
+export const getSnippetById = createAsyncThunk(
+  "snippets/getById",
+  async ({ id, token }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/snippets/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch snippet");
+    }
+  }
+);
+
 const snippetSlice = createSlice({
   name: "snippet",
   initialState: {
     snippets: [],
+    snippet: null,
     loading: false,
     error: null,
   },
@@ -63,9 +79,21 @@ const snippetSlice = createSlice({
       })
       .addCase(getSnippets.fulfilled, (state, action) => {
         state.loading = false;
-        state.snippets.push(action.payload);
+        state.snippets = action.payload;
       })
       .addCase(getSnippets.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getSnippetById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getSnippetById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.snippet = action.payload;  // store single snippet
+      })
+      .addCase(getSnippetById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

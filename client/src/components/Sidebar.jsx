@@ -25,22 +25,22 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
         <ul className="space-y-4 px-4 mt-6">
           <li>
-            <Link to="/dashboard" className={` ${location.pathname === "/dashboard" ? "bg-[#E19FF5]" : ""} text-black rounded-md px-2 py-1 block`}>
+            <Link to="/dashboard" className={` ${location.pathname === "/dashboard" ? "bg-[#E19FF5]" : ""} text-[#6B068C]  font-semibold rounded-md px-2 py-1 block`}>
               { isOpen ? "Dashboard" : <LayoutDashboard />}
             </Link>
           </li>
           <li>
-            <Link to="/settings" className={` ${location.pathname === "/settings" ? "bg-[#E19FF5]" : ""} text-black rounded-md px-2 py-1 block`}>
+            <Link to="/settings" className={` ${location.pathname === "/settings" ? "bg-[#E19FF5]" : ""} text-[#6B068C]  font-semibold rounded-md px-2 py-1 block`}>
               { isOpen ? "Settings" : <Settings />}
             </Link>
           </li>
           <li>
-            <Link to="/profile" className={` ${location.pathname === "/profile" ? "bg-[#E19FF5]" : ""} text-black rounded-md px-2 py-1 block`}>
+            <Link to="/profile" className={` ${location.pathname === "/profile" ? "bg-[#E19FF5]" : ""} text-[#6B068C]  font-semibold rounded-md px-2 py-1 block`}>
               { isOpen ? "Profile" : <User />}
             </Link>
           </li>
           <li>
-            <Link to={"/snippets"} className={` ${location.pathname === "/snippets" ? "bg-[#E19FF5]" : ""} text-black rounded-md px-2 py-1 block`}>
+            <Link to={"/snippets"} className={` ${location.pathname === "/snippets" ? "bg-[#E19FF5]" : ""} text-[#6B068C]  font-semibold rounded-md px-2 py-1 block`}>
              { isOpen ? "Snippets" : <Code />}
             </Link>
           </li>
