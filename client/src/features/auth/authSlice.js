@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// http://localhost:3000/
 
 const initialState = {
   user: localStorage.getItem('user'),
