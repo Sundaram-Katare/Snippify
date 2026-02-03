@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar.jsx"
 export default function Home() {
     return (
         <>
-            <div className="bg-gradient-to-b from-white to-blue-100">
+            <div className="bg-[#FFE5FA]">
                 {/* <Navbar toggleSidebar={toggleSidebar} /> */}
                 <Hero />
                 {/* <Features /> */}

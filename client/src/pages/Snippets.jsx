@@ -63,7 +63,7 @@ export default function Snippets() {
     };
 
     return (
-        <div className="p-8 relative min-h-screen bg-gray-50">
+        <div className="p-8 relative min-h-screen bg-[#ffffff]">
             {/* Header */}
             <div className="space-y-4 max-w-5xl">
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900">
@@ -85,7 +85,7 @@ export default function Snippets() {
                     <button
                         onClick={() => setOpenAddSnippetModal(true)}
                         className="flex items-center justify-center gap-2 
-              bg-blue-600 hover:bg-blue-700 
+              bg-[#562F00] hover:bg-blue-700 
               text-white px-5 py-3 rounded-lg 
               font-semibold transition shadow-sm"
                     >
@@ -258,8 +258,7 @@ function SnippetCard({ snippet }) {
   return (
     <motion.div
       whileHover={{ y: -4 }}
-      className="rounded-xl p-4 shadow-md bg-gradient-to-br 
-        from-gray-900 to-gray-800 text-white relative"
+      className="rounded-xl p-4 shadow-md bg-[#FFFDF1] text-black relative"
     >
       {/* Title */}
       <h3 className="font-semibold text-lg truncate">
@@ -267,7 +266,7 @@ function SnippetCard({ snippet }) {
       </h3>
 
       {/* Description */}
-      <p className="text-sm text-gray-300 mt-1 line-clamp-2">
+      <p className="text-sm text-gray-900 mt-1 line-clamp-2">
         {snippet.description}
       </p>
 
@@ -290,7 +289,7 @@ function SnippetCard({ snippet }) {
           to={`/snippets/${snippet._id}`}
           target="_blank"
           className="text-sm font-semibold px-3 py-1.5 
-            rounded-md bg-blue-600 hover:bg-blue-700 transition"
+            rounded-md bg-[#562F00] hover:bg-[#562F00] text-white transition"
         >
           View
         </Link>
@@ -299,7 +298,7 @@ function SnippetCard({ snippet }) {
         {!addingTag ? (
           <button
             onClick={() => setAddingTag(true)}
-            className="text-xs text-gray-300 hover:text-white"
+            className="text-xs text-gray-900 hover:text-black"
           >
             + Add tag
           </button>

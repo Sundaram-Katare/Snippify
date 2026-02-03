@@ -23,7 +23,7 @@ export default function Hero() {
 
             {/* <p className="text-xl text-gray-600 font-semibold">From chaos to clarity —</p>
             <p className="text-xl text-gray-600 font-semibold">manage your snippets like a pro.</p> */}
-         <img src="hero2.png" alt="" className="rounded-lg h-[550px] " />
+         <img src="hero3.png" alt="" className="rounded-lg h-[550px] " />
 
          <h2 className="font-inter text-black text-4xl font-semibold my-6">Ready to clear the chaos?</h2>
 

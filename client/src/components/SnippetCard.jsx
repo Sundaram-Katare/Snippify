@@ -35,11 +35,11 @@ export default function SnippetCard({ snippet, onUpdate }) {
     <>
       {/* View Mode */}
       {view && !isEditing && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[#fbf8f8] bg-opacity-50 flex items-center justify-center z-50">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-lg shadow-lg w-11/12 md:w-3/4 lg:w-1/2 p-6 relative"
+            className="bg-[#fbf8f8] rounded-lg shadow-lg w-11/12 md:w-3/4 lg:w-1/2 p-6 relative"
           >
             <div className="flex flex-col">
               <div className="flex justify-between items-center mb-4">

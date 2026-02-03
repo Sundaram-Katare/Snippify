@@ -1,36 +1,65 @@
 import { useDispatch, useSelector } from "react-redux";
-import AddComponent from "../components/AddComponent";
-import Catolouge from "../components/Catolouge";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { getProfile } from "../features/auth/authSlice";
 
+const taglines = [
+  "What's for today",
+  "Get AI Insights from your code",
+  "Visit recently added snippets",
+];
 
 export default function Dashboard() {
-    const dispatch = useDispatch();
-    const { user, loading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { user, loading } = useSelector((state) => state.auth);
 
-    useEffect(() => {
-        if (!user) {
-            dispatch(getProfile());
-        }
-    }, [dispatch, user]);
+  const [index, setIndex] = useState(0);
 
+  // fetch profile
+  useEffect(() => {
+    if (!user) {
+      dispatch(getProfile());
+    }
+  }, [dispatch, user]);
 
-    if (loading) return <p>Loading profile...</p>;
-    return (
-        <>
-            <div className="flex flex-col md:flex-row gap-2 min-h-screen justify-center p-16 ">
-                {/* <Sidebar />
-                {/* <Catolouge /> */}
-                {/* <AddComponent /> */}
+  // tagline animation logic
+  useEffect(() => {
+    if (index >= taglines.length - 1) {
+      const timeout = setTimeout(() => setIndex(0), 3000);
+      return () => clearTimeout(timeout);
+    }
 
-                <h1 className="text-6xl font-pacifico font-semibold text-black text-center">
-                   Hello {user?.name}
-                </h1>
+    const interval = setTimeout(() => {
+      setIndex((prev) => prev + 1);
+    }, 3000);
 
-            </div>
-        </>
-    )
+    return () => clearTimeout(interval);
+  }, [index]);
+
+  if (loading) return <p>Loading profile...</p>;
+
+  return (
+    <div className="flex flex-col gap-4 min-h-screen bg-[#ffffff] items-center p-16">
+      {/* Greeting */}
+      <h1 className="text-6xl font-pacifico font-semibold text-black text-center">
+        Hello {user?.name}
+      </h1>
+
+      {/* Taglines */}
+      <div className="h-10 mt-4">
+        <AnimatePresence mode="wait">
+          <motion.h2
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.6 }}
+            className="text-xl font-medium text-gray-700 text-center"
+          >
+            {taglines[index]}
+          </motion.h2>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
 }
