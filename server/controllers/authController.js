@@ -105,3 +105,17 @@ export const switchTheme = async (req, res) => {
     return res.status(500).json({ message: "Internal Server error" });
   }
 };
+
+export const setApiKey = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const {apiKey} = req.body;
+
+    const user = await User.findByIdAndUpdate(userId,{ geminiApiKey: apiKey}, { new: true });
+
+    return res.status(200).json({ message: "Updated API Key", user});
+  } catch (err) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
