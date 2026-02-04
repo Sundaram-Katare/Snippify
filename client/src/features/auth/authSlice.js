@@ -61,6 +61,23 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const switchTheme = createAsyncThunk(
+  "theme/switchTheme",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("Token", token);
+      const res = await axios.patch("http://localhost:3000/api/auth/theme", {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      }); 
+      console.log(res); 
+      return res.data.user; 
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -122,7 +139,20 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
         localStorage.removeItem("token");
+      })
+      .addCase(switchTheme.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(switchTheme.fulfilled, (state, action) => {
+        state.loading = false;
+        state.theme = action.payload; // update theme
+      })
+      .addCase(switchTheme.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+
   },
 });
 

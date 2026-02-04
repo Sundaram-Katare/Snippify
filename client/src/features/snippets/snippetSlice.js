@@ -36,6 +36,18 @@ export const getSnippets = createAsyncThunk(
     }
 );
 
+export const updateSnippet = createAsyncThunk(
+  "snippets/updateSnippet",
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const res = await axios.put(`/api/snippets/${id}`, data);
+      return res.data.updated; 
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || err.message);
+    }
+  }
+);
+
 export const getSnippetById = createAsyncThunk(
   "snippets/getById",
   async ({ id, token }, { rejectWithValue }) => {
@@ -94,6 +106,23 @@ const snippetSlice = createSlice({
         state.snippet = action.payload;  // store single snippet
       })
       .addCase(getSnippetById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateSnippet.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateSnippet.fulfilled, (state, action) => {
+        state.loading = false;
+        state.snippet = action.payload; // update single snippet
+        // also update in snippets array if present
+        const idx = state.snippets.findIndex(s => s._id === action.payload._id);
+        if (idx !== -1) {
+          state.snippets[idx] = action.payload;
+        }
+      })
+      .addCase(updateSnippet.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

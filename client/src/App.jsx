@@ -21,8 +21,11 @@ function AppContent() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
 
-  // Check if current route is NOT home page
+  // Sidebar should not show on home or auth
   const showSidebar = location.pathname !== "/" && location.pathname !== "/auth";
+
+  // Navbar should not show on profile
+  const showNavbar = location.pathname !== "/profile";
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -36,7 +39,7 @@ function AppContent() {
     <div className="flex h-screen">
       {showSidebar && <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />}
       <div className={`flex-1 flex flex-col ${showSidebar ? '' : 'w-full'}`}>
-        <Navbar toggleSidebar={toggleSidebar} />
+        {showNavbar && <Navbar toggleSidebar={toggleSidebar} />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/snippets/:id" element={<SnippetDetail />} />

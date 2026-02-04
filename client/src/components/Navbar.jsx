@@ -1,7 +1,7 @@
 import { MdArrowOutward } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getProfile, logout } from "../features/auth/authSlice";
+import { getProfile, logout, switchTheme } from "../features/auth/authSlice";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -11,6 +11,11 @@ export default function Navbar() {
   const handleLogout = () => {
     dispatch(logout());
     navigate("/auth");
+  };
+
+  const changeTheme = () => {
+    console.log("Hello");
+      dispatch(switchTheme());
   };
 
   const seeProfile = () => {
@@ -30,10 +35,10 @@ export default function Navbar() {
             </h2>
 
             <button
-              onClick={seeProfile}
+              onClick={changeTheme}
               className="bg-[#61B8FF] px-4 py-2 rounded-xl"
             >
-              Profile
+              Switch Theme
             </button>
 
             <button

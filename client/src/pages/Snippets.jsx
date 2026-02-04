@@ -7,17 +7,15 @@ import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import { Link } from "react-router-dom";
 
-// theme
 import "prismjs/themes/prism-tomorrow.css";
 
-// REQUIRED DEPENDENCIES (VERY IMPORTANT)
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-c";
 import "prismjs/components/prism-cpp";
 
-// other languages
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-java";
+import { getProfile } from "../features/auth/authSlice.js";
 
 
 const TAG_COLORS = [
@@ -42,13 +40,18 @@ export default function Snippets() {
     });
 
     const dispatch = useDispatch();
-    const { snippets, loading, error } = useSelector((state) => state.snippet);
+    const { snippets, user, loading, error } = useSelector((state) => state.snippet);
     const token = localStorage.getItem("token");
 
-    // fetch snippets once on mount
     useEffect(() => {
         dispatch(getSnippets({ token }));
     }, [dispatch, token]);
+
+    useEffect(() => {
+        if(!user) {
+            dispatch(getProfile());
+        } 
+    }, [dispatch, user]);
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -240,87 +243,87 @@ export default function Snippets() {
 
 
 function SnippetCard({ snippet }) {
-  const [tags, setTags] = useState(snippet.tags || []);
-  const [addingTag, setAddingTag] = useState(false);
-  const [tagInput, setTagInput] = useState("");
+    const [tags, setTags] = useState(snippet.tags || []);
+    const [addingTag, setAddingTag] = useState(false);
+    const [tagInput, setTagInput] = useState("");
 
-  const addTag = () => {
-    if (!tagInput.trim()) return;
+    const addTag = () => {
+        if (!tagInput.trim()) return;
 
-    setTags([
-      ...tags,
-      { name: tagInput, color: getRandomTagColor() },
-    ]);
-    setTagInput("");
-    setAddingTag(false);
-  };
+        setTags([
+            ...tags,
+            { name: tagInput, color: getRandomTagColor() },
+        ]);
+        setTagInput("");
+        setAddingTag(false);
+    };
 
-  return (
-    <motion.div
-      whileHover={{ y: -4 }}
-      className="rounded-xl p-4 shadow-md bg-[#FFFDF1] text-black relative"
-    >
-      {/* Title */}
-      <h3 className="font-semibold text-lg truncate">
-        {snippet.title}
-      </h3>
-
-      {/* Description */}
-      <p className="text-sm text-gray-900 mt-1 line-clamp-2">
-        {snippet.description}
-      </p>
-
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mt-3">
-        {tags.map((tag, idx) => (
-          <span
-            key={idx}
-            className={`px-2 py-1 text-xs rounded-full ${tag.color}`}
-          >
-            #{tag.name}
-          </span>
-        ))}
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center justify-between mt-4">
-        {/* View */}
-        <Link
-          to={`/snippets/${snippet._id}`}
-          target="_blank"
-          className="text-sm font-semibold px-3 py-1.5 
-            rounded-md bg-[#562F00] hover:bg-[#562F00] text-white transition"
+    return (
+        <motion.div
+            whileHover={{ y: -4 }}
+            className="rounded-xl p-4 shadow-md bg-[#FFFDF1] text-black relative"
         >
-          View
-        </Link>
+            {/* Title */}
+            <h3 className="font-semibold text-lg truncate">
+                {snippet.title}
+            </h3>
 
-        {/* Add tag */}
-        {!addingTag ? (
-          <button
-            onClick={() => setAddingTag(true)}
-            className="text-xs text-gray-900 hover:text-black"
-          >
-            + Add tag
-          </button>
-        ) : (
-          <div className="flex items-center gap-1">
-            <input
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              className="w-20 px-2 py-1 text-xs rounded bg-gray-700 
+            {/* Description */}
+            <p className="text-sm text-gray-900 mt-1 line-clamp-2">
+                {snippet.description}
+            </p>
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 mt-3">
+                {tags.map((tag, idx) => (
+                    <span
+                        key={idx}
+                        className={`px-2 py-1 text-xs rounded-full ${tag.color}`}
+                    >
+                        #{tag.name}
+                    </span>
+                ))}
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-between mt-4">
+                {/* View */}
+                <Link
+                    to={`/snippets/${snippet._id}`}
+                    target="_blank"
+                    className="text-sm font-semibold px-3 py-1.5 
+            rounded-md bg-[#562F00] hover:bg-[#562F00] text-white transition"
+                >
+                    View
+                </Link>
+
+                {/* Add tag */}
+                {!addingTag ? (
+                    <button
+                        onClick={() => setAddingTag(true)}
+                        className="text-xs text-gray-900 hover:text-black"
+                    >
+                        + Add tag
+                    </button>
+                ) : (
+                    <div className="flex items-center gap-1">
+                        <input
+                            value={tagInput}
+                            onChange={(e) => setTagInput(e.target.value)}
+                            className="w-20 px-2 py-1 text-xs rounded bg-gray-700 
                 text-white outline-none"
-              placeholder="tag"
-              autoFocus
-            />
-            <button
-              onClick={addTag}
-              className="text-xs px-2 py-1 rounded bg-green-600"
-            >
-              Add
-            </button>
-          </div>
-        )}
-      </div>
-    </motion.div>
-  );
+                            placeholder="tag"
+                            autoFocus
+                        />
+                        <button
+                            onClick={addTag}
+                            className="text-xs px-2 py-1 rounded bg-green-600"
+                        >
+                            Add
+                        </button>
+                    </div>
+                )}
+            </div>
+        </motion.div>
+    );
 }

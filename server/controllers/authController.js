@@ -82,3 +82,26 @@ export const getProfile = async (req, res) => {
     return res.status(500).json({ message: "Internal server eror", err: err.message })
   }
 };
+
+export const switchTheme = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const userDoc = await User.findById(userId);
+    if (!userDoc) {
+      return res.status(404).json({ message: "User Not Found" });
+    }
+
+    const newTheme = userDoc.theme === "light" ? "dark" : "light";
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { theme: newTheme },
+      { new: true }
+    );
+
+    return res.status(200).json({ user: updatedUser });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal Server error" });
+  }
+};
