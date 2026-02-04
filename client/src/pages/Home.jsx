@@ -5,6 +5,7 @@ import Insights from "../components/Insights.jsx"
 import Navbar from "../components/Navbar.jsx"
 import { useEffect } from "react"
 import { getProfile } from "../features/auth/authSlice.js"
+import ProSnippetManagement from "../components/ProSnippetManagement.jsx"
 
 export default function Home() {
     const dispatch = useDispatch();
@@ -18,6 +19,8 @@ export default function Home() {
 
     if (loading) return <p>Loading profile...</p>;
 
+    const isLight = user?.theme === 'light';
+
     return (
         <>
             <div className={`${user?.theme == "light" ? "bg-[#ffffff]" : "bg-[#000000]" } dark:bg-black`}>
@@ -25,6 +28,7 @@ export default function Home() {
                 <Hero />
                 {/* <Features /> */}
                 <Insights />
+                <ProSnippetManagement isLight={isLight} />
             </div>
         </>
     )

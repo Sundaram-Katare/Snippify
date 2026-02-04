@@ -2,58 +2,124 @@ import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../features/auth/authSlice";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
     const dispatch = useDispatch();
     const { user, loading } = useSelector((state) => state.auth);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        if(!user) {
+        if (!user) {
             dispatch(getProfile());
         }
     }, [dispatch, user]);
 
+    const isLight = user?.theme === 'light';
+
     if (loading) return <p>Loading profile...</p>;
     return (
         <>
-         <div className="flex flex-col justify-center bg-transparent items-center p-8 m-4">
-            {/* <button className="px-2 py-2 rounded-2xl border border-t-2 shadow-md font-inter shadow-black max-w-fit cursor-none">
-                Save it Once, Use it forever
-            </button> */}
-            <motion.h1 className={`font-semibold text-8xl font-inter text-black text-center mb-4 ${user?.theme == "light" ? "" : "bg-gradient-to-r from-gray-300 via-gray-400 to-gray-600 bg-clip-text text-transparent" } dark:bg-black`}
-                       initial={{ opacity: 0, x: -60 }}
-                       animate={{ opacity: 1, x: 0 }}
-                       transition={{ duration: 0.8 }}
-            >Organize Your 
-            </motion.h1>
+            <div
+                className={`
+    flex flex-col items-center justify-center
+    p-6 sm:p-10 lg:p-16
+    mx-auto max-w-7xl
+    ${isLight
+                        ? "bg-transparent"
+                        : "relative bg-gradient-to-br from-[#05070d] via-[#0b1220] to-[#020617]"
+                    }
+  `}
+            >
+                {/* subtle glow for dark theme */}
+                {!isLight && (
+                    <div className="absolute inset-0 pointer-events-none">
+                        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-500/20 blur-[160px]" />
+                        <div className="absolute bottom-0 right-1/3 w-[400px] h-[400px] bg-cyan-400/20 blur-[140px]" />
+                    </div>
+                )}
 
-            <motion.h1 className={`font-semibold text-8xl font-inter text-black text-center mb-4 ${user?.theme == "light" ? "" : "bg-gradient-to-r from-gray-300 via-gray-400 to-gray-600 bg-clip-text text-transparent" }`}
-                       initial={{ opacity: 0, x: 60 }}
-                       animate={{ opacity: 1, x: 0 }}
-                       transition={{ duration: 0.8 }}
-            >Code <span className="text-[#3E9DE6]">Snippets</span> 
-            </motion.h1>
+                {/* Headings */}
+                <motion.h1
+                    className={`
+      relative z-10 font-inter font-semibold
+      text-5xl sm:text-6xl md:text-7xl lg:text-8xl
+      text-center mb-4
+      ${isLight
+                            ? "text-black"
+                            : "bg-gradient-to-r from-zinc-200 via-white to-zinc-400 bg-clip-text text-transparent"
+                        }
+    `}
+                    initial={{ opacity: 0, x: -60 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                >
+                    Organize Your
+                </motion.h1>
 
-            <motion.button className="bg-black text-white px-2 py-2 font-inter rounded-2xl text-4xl ">
-                Get Started
-            </motion.button>
+                <motion.h1
+                    className={`
+      relative z-10 font-inter font-semibold
+      text-5xl sm:text-6xl md:text-7xl lg:text-8xl
+      text-center mb-6
+      ${isLight
+                            ? "text-black"
+                            : "bg-gradient-to-r from-indigo-400 via-cyan-400 to-sky-500 bg-clip-text text-transparent"
+                        }
+    `}
+                    initial={{ opacity: 0, x: 60 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                >
+                    Code <span className={isLight ? "text-[#3E9DE6]" : ""}>Snippets</span>
+                </motion.h1>
 
-            {/* <p className="text-xl text-gray-600 font-semibold">From chaos to clarity —</p>
-            <p className="text-xl text-gray-600 font-semibold">manage your snippets like a pro.</p> */}
-         <img src="hero4.png" alt="" className="rounded-lg h-[550px] " />
-{/* 
-         <h2 className="font-inter text-black text-4xl font-semibold my-6">Ready to clear the chaos?</h2>
+                {/* CTA Button */}
+                <motion.button
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.96 }}
+                    className={`
+      relative z-10
+      mt-4 mb-10
+      px-6 sm:px-8 py-3 sm:py-4
+      rounded-2xl font-inter font-semibold
+      text-lg sm:text-xl
+      transition-all duration-300
+      ${isLight
+                            ? "bg-black text-white hover:bg-zinc-800"
+                            : `
+            bg-gradient-to-r from-indigo-600 to-cyan-500
+            text-white
+            shadow-[0_0_30px_rgba(99,102,241,0.45)]
+            hover:shadow-[0_0_45px_rgba(34,211,238,0.6)]
+          `
+                        }
+    `}
+    onClick={() => navigate("/dashboard")}
+                >
+                    Get Started
+                </motion.button>
 
-         <p className="font-regular text-center text-2xl font-inter">
-            Join thousands of developers transforming
-            <br />
-             their workflow
-         </p>
-
-         <button className="flex my-6 justify-center items-center px-2 py-1 rounded-md text-4xl font-inter text-white bg-[#3E9DE6]">
-            Join Now
-         </button> */}
-         </div>
+                {/* Hero Image */}
+                <motion.img
+                    src="hero4.png"
+                    alt="Snippify Hero"
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, ease: "easeOut" }}
+                    className={`
+      relative z-10
+      w-full max-w-5xl
+      h-auto
+      rounded-xl
+      ${isLight
+                            ? "shadow-lg"
+                            : "shadow-[0_30px_80px_rgba(0,0,0,0.8)] border border-white/5"
+                        }
+    `}
+                />
+            </div>
         </>
     )
 }
