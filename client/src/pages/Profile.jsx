@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from 'react-hot-toast';
 import {
   Eye,
   EyeOff,
@@ -23,6 +24,17 @@ export default function Profile() {
 
   const [showKey, setShowKey] = useState(false);
   const [apiKey, setApiKey] = useState("");
+
+  const handleSaveApiKey = async () => {
+  try {
+    await dispatch(updateApiKey({ apiKey })).unwrap();
+    toast.success("API key updated successfully 🔐");
+    setApiKey(""); // clear input after save
+  } catch (err) {
+    toast.error(err || "Failed to update API key");
+  }
+};
+
 
   useEffect(() => {
     if (!user) dispatch(getProfile());
@@ -166,7 +178,7 @@ export default function Profile() {
 
               {/* Save button */}
               <button
-                onClick={() => dispatch(updateApiKey({ apiKey }))}
+                onClick={handleSaveApiKey}
                 className={`
       w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium transition
       ${isLight

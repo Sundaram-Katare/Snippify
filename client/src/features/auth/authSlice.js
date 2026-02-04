@@ -69,9 +69,9 @@ export const switchTheme = createAsyncThunk(
       console.log("Token", token);
       const res = await axios.patch("http://localhost:3000/api/auth/theme", {}, {
         headers: { Authorization: `Bearer ${token}` }
-      }); 
-      console.log(res); 
-      return res.data.user; 
+      });
+      console.log(res);
+      return res.data.user;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
     }
@@ -80,13 +80,13 @@ export const switchTheme = createAsyncThunk(
 
 export const updateApiKey = createAsyncThunk(
   'key/update',
-  async ( apiKey, { rejectWithValue }) => {
+  async (apiKey, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       console.log();
 
       const res = await axios.patch('http://localhost:3000/api/auth/key', apiKey, {
-        headers: { Authorization: `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` }
       });
       console.log(res);
       return res.data;
@@ -164,7 +164,9 @@ const authSlice = createSlice({
       })
       .addCase(switchTheme.fulfilled, (state, action) => {
         state.loading = false;
-        state.theme = action.payload; // update theme
+        if (state.user) {
+          state.user.theme = action.payload.theme || action.payload;
+        }
       })
       .addCase(switchTheme.rejected, (state, action) => {
         state.loading = false;
