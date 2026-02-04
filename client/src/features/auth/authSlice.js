@@ -78,6 +78,24 @@ export const switchTheme = createAsyncThunk(
   }
 );
 
+export const updateApiKey = createAsyncThunk(
+  'key/update',
+  async ( apiKey, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log();
+
+      const res = await axios.patch('http://localhost:3000/api/auth/key', apiKey, {
+        headers: { Authorization: `Bearer ${token}`}
+      });
+      console.log(res);
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -151,8 +169,19 @@ const authSlice = createSlice({
       .addCase(switchTheme.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(updateApiKey.pending, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updateApiKey.fulfilled, (state, action) => {
+        state.loading = false;
+        state.apiKey = action.payload;
+      })
+      .addCase(updateApiKey.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
-
   },
 });
 

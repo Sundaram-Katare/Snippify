@@ -8,8 +8,7 @@ const userSchema = new mongoose.Schema({
 
   geminiApiKey: {
     type: String, // encrypted later
-    select: false,
-    default: ""
+    default: "key"
   },
 
   theme: {
