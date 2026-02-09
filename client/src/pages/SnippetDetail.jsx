@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getSnippetById, updateCode } from "../features/snippets/snippetSlice.js";
+import { getSnippetById, updateCode, explainCode } from "../features/snippets/snippetSlice.js";
 import { motion, AnimatePresence } from "framer-motion";
 import { getProfile } from "../features/auth/authSlice.js";
+import { toast } from "react-hot-toast";
+import { Loader } from "lucide-react";
 
 const SnippetDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const { snippet, loading, error } = useSelector((state) => state.snippet);
+  const { snippet, loading, error, explanation } = useSelector((state) => state.snippet);
   const { user } = useSelector((state) => state.auth);
-
+  const [explainLoading, setExplainLoading] = useState(false);
   const [showExplain, setShowExplain] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -25,6 +27,33 @@ const SnippetDetail = () => {
 
   const updateCodeHandler = (newCode) => {
     dispatch(updateCode({ id, code: newCode }));
+  };
+
+  const handleExplainCode = async () => {
+    setShowExplain(true);
+    setExplainLoading(true);
+
+    try {
+      const result = await dispatch(explainCode({
+        id  // Send only the id, not code and language
+      })).unwrap();
+
+      setExplainLoading(false);
+      toast.success("Code explained successfully! ✨");
+    } catch (err) {
+      setExplainLoading(false);
+
+      if (err.code === "NO_API_KEY") {
+        toast.error("Please Add Gemini API Key");
+        setShowExplain(false);
+      } else if (err.code === "EXPIRED_API_KEY") {
+        toast.error("Gemini API key is expired, Please add another key");
+        setShowExplain(false);
+      } else {
+        toast.error(err.error || "Failed to explain code");
+        setShowExplain(false);
+      }
+    }
   };
 
   if (loading) return <p>Loading snippet...</p>;
@@ -72,13 +101,23 @@ const SnippetDetail = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setShowExplain(true)}
-                className={`px-4 py-2 rounded-xl transition font-medium ${isLight
-                    ? "bg-[#562F00] text-white"
-                    : "bg-indigo-600 text-white hover:bg-indigo-500"
+                onClick={handleExplainCode}
+                disabled={explainLoading}
+                className={`px-4 py-2 rounded-xl transition font-medium ${explainLoading
+                    ? "opacity-70 cursor-not-allowed"
+                    : isLight
+                      ? "bg-[#562F00] text-white hover:bg-[#6b3a00]"
+                      : "bg-indigo-600 text-white hover:bg-indigo-500"
                   }`}
               >
-                Explain with AI
+                {explainLoading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader size={16} className="animate-spin" />
+                    Explaining...
+                  </span>
+                ) : (
+                  "Explain with AI"
+                )}
               </motion.button>
 
               <motion.button
@@ -86,8 +125,8 @@ const SnippetDetail = () => {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowModal(true)}
                 className={`px-4 py-2 rounded-xl transition ${isLight
-                    ? "border border-zinc-300 hover:bg-zinc-200"
-                    : "border border-zinc-700 hover:bg-zinc-800"
+                  ? "border border-zinc-300 hover:bg-zinc-200"
+                  : "border border-zinc-700 hover:bg-zinc-800"
                   }`}
               >
                 Update Snippet
@@ -97,8 +136,8 @@ const SnippetDetail = () => {
 
           <pre
             className={`text-sm rounded-xl p-5 overflow-x-auto font-mono shadow-inner ${isLight
-                ? "bg-white text-zinc-900"
-                : "bg-[#0d1117] text-zinc-100"
+              ? "bg-white text-zinc-900"
+              : "bg-[#0d1117] text-zinc-100"
               }`}
           >
             <code>{snippet.code}</code>
@@ -128,28 +167,62 @@ const SnippetDetail = () => {
                 exit={{ opacity: 0 }}
               >
                 Click{" "}
-                <span className="mx-1 text-indigo-400">
+                <span className={`mx-1 ${isLight ? "text-[#562F00]" : "text-indigo-400"}`}>
                   Explain with AI
                 </span>{" "}
                 to see the explanation here
               </motion.div>
             )}
 
-            {showExplain && (
+            {showExplain && explainLoading && (
+              <motion.div
+                className="h-full flex flex-col items-center justify-center gap-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <div className={`flex items-center gap-3 ${isLight ? "text-[#562F00]" : "text-indigo-400"}`}>
+                  <Loader size={24} className="animate-spin" />
+                  <span className="text-lg font-medium">Analyzing your code...</span>
+                </div>
+              </motion.div>
+            )}
+
+            {showExplain && !explainLoading && explanation && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 className="space-y-3"
               >
-                <h3 className="text-xl font-semibold">AI Explanation</h3>
-                <p className="text-sm leading-relaxed text-zinc-400">
-                  AI-generated explanation will appear here.
-                </p>
+                <h3 className={`text-xl font-semibold ${isLight ? "text-zinc-900" : "text-zinc-100"}`}>
+                  AI Explanation
+                </h3>
+                <ul className={`space-y-2 ${isLight ? "text-zinc-700" : "text-zinc-300"}`}>
+                  {explanation.explanation && explanation.explanation.map((point, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className={`flex gap-3 text-sm leading-relaxed p-2 rounded-lg ${isLight ? "bg-[#FFFDF1]" : "bg-zinc-800"
+                        }`}
+                    >
+                      <span className={`flex-shrink-0 font-semibold ${isLight ? "text-[#562F00]" : "text-indigo-400"}`}>
+                        {index + 1}.
+                      </span>
+                      <span>{point}</span>
+                    </motion.li>
+                  ))}
+                </ul>
               </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
+      </div>
+
+      <div className="mt-16">
+         <h1 className="text-center text-black text-2xl">NOTE: The explanation will disappear when the page is refreshed.</h1>
       </div>
 
       {/* MODAL */}
@@ -162,30 +235,39 @@ const SnippetDetail = () => {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-zinc-900 rounded-2xl p-6 w-full max-w-lg shadow-2xl"
+              className={`rounded-2xl p-6 w-full max-w-lg shadow-2xl ${isLight ? "bg-[#FFFDF1]" : "bg-zinc-900"}`}
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.85, opacity: 0 }}
             >
-              <h3 className="text-xl font-semibold mb-4">
+              <h3 className={`text-xl font-semibold mb-4 ${isLight ? "text-zinc-900" : "text-zinc-100"}`}>
                 Update Snippet
               </h3>
 
               <textarea
                 defaultValue={snippet.code}
-                className="w-full h-40 bg-[#0d1117] text-zinc-100 rounded-xl p-4 font-mono text-sm resize-none"
+                className={`w-full h-40 rounded-xl p-4 font-mono text-sm resize-none ${isLight
+                    ? "bg-white text-zinc-900 border border-zinc-300"
+                    : "bg-[#0d1117] text-zinc-100 border border-zinc-700"
+                  }`}
               />
 
               <div className="flex justify-end gap-3 mt-4">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded-xl text-white border border-zinc-100 hover:bg-zinc-800"
+                  className={`px-4 py-2 rounded-xl transition ${isLight
+                      ? "border border-zinc-300 text-zinc-900 hover:bg-zinc-200"
+                      : "border border-zinc-700 text-zinc-100 hover:bg-zinc-800"
+                    }`}
                 >
                   Cancel
                 </button>
-                <button className="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-500"
+                <button
+                  className={`px-4 py-2 rounded-xl transition font-medium ${isLight
+                      ? "bg-[#562F00] text-white hover:bg-[#6b3a00]"
+                      : "bg-indigo-600 text-white hover:bg-indigo-500"
+                    }`}
                   onClick={() => {
-                    // Call updateCodeHandler with new code value
                     const newCode = document.querySelector("textarea").value;
                     updateCodeHandler(newCode);
                     setShowModal(false);

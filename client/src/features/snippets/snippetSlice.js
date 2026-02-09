@@ -21,19 +21,19 @@ export const createSnippet = createAsyncThunk(
 );
 
 export const getSnippets = createAsyncThunk(
-    "snippets/get",
-    async ( { token }, { rejectWithValue }) => {
-        try {
-          const response = await axios.get("http://localhost:3000/api/snippets", {
-            headers: { Authorization: `Bearer ${token}` }
-          });
+  "snippets/get",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/snippets", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-          console.log(response);
-          return response.data;
-        } catch (err) {
-            return rejectWithValue(err.response.data?.message);
-        }
+      console.log(response);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data?.message);
     }
+  }
 );
 
 export const updateSnippet = createAsyncThunk(
@@ -41,7 +41,7 @@ export const updateSnippet = createAsyncThunk(
   async ({ id, data }, { rejectWithValue }) => {
     try {
       const res = await axios.put(`/api/snippets/${id}`, data);
-      return res.data.updated; 
+      return res.data.updated;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || err.message);
     }
@@ -79,7 +79,7 @@ export const updateCode = createAsyncThunk(
 
 export const deleteSnippet = createAsyncThunk(
   "snippets/delete",
-   async ({ id }, { rejectWithValue }) => {
+  async ({ id }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.delete(`http://localhost:3000/api/snippets/${id}`, {
@@ -89,7 +89,29 @@ export const deleteSnippet = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Failed to delete snippet");
     }
-   }
+  }
+);
+
+export const explainCode = createAsyncThunk(
+  "snippets/explainCode",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `http://localhost:3000/api/snippets/explain/${id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue({
+        error: err.response?.data?.error || "Failed to explain code",
+        code: err.response?.data?.code
+      });
+    }
+  }
 );
 
 const snippetSlice = createSlice({
@@ -99,6 +121,7 @@ const snippetSlice = createSlice({
     snippet: null,
     loading: false,
     error: null,
+    explanation: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -186,7 +209,20 @@ const snippetSlice = createSlice({
       })
       .addCase(deleteSnippet.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; 
+        state.error = action.payload;
+      })
+      .addCase(explainCode.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.explanation = null;
+      })
+      .addCase(explainCode.fulfilled, (state, action) => {
+        state.loading = false;
+        state.explanation = action.payload;
+      })
+      .addCase(explainCode.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

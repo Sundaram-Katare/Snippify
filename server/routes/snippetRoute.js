@@ -6,7 +6,8 @@ import {
   getSnippetById,
   updateSnippet,
   deleteSnippet,
-  updateCode
+  updateCode,
+  explainCode
 } from "../controllers/snippetController.js";
 import { auth } from "../middlewares/authMiddleware.js";
 
@@ -18,5 +19,5 @@ router.get("/:id", auth, getSnippetById);    // Read one
 router.put("/:id", auth, updateSnippet);     // Update
 router.delete("/:id", auth, deleteSnippet);  // Delete
 router.patch('/:id', auth, updateCode);
-
+router.post("/explain/:id", auth, explainCode);
 export default router;
