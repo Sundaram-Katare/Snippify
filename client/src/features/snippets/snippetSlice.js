@@ -62,6 +62,36 @@ export const getSnippetById = createAsyncThunk(
   }
 );
 
+export const updateCode = createAsyncThunk(
+  "snippet/updateCode",
+  async ({ id, code }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.patch(`http://localhost:3000/api/snippets/${id}`, { code }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to update code");
+    }
+  }
+);
+
+export const deleteSnippet = createAsyncThunk(
+  "snippets/delete",
+   async ({ id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.delete(`http://localhost:3000/api/snippets/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to delete snippet");
+    }
+   }
+);
+
 const snippetSlice = createSlice({
   name: "snippet",
   initialState: {
@@ -125,6 +155,38 @@ const snippetSlice = createSlice({
       .addCase(updateSnippet.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(updateCode.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCode.fulfilled, (state, action) => {
+        state.loading = false;
+        state.snippet = action.payload; // update single snippet
+        // also update in snippets array if present
+        const idx = state.snippets.findIndex(s => s._id === action.payload._id);
+        if (idx !== -1) {
+          state.snippets[idx] = action.payload;
+        }
+      })
+      .addCase(updateCode.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteSnippet.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteSnippet.fulfilled, (state, action) => {
+        state.loading = false;
+        state.snippets = state.snippets.filter(s => s._id !== action.payload.id);
+        if (state.snippet?._id === action.payload.id) {
+          state.snippet = null; // clear if deleted snippet was being viewed
+        }
+      })
+      .addCase(deleteSnippet.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; 
       });
   },
 });

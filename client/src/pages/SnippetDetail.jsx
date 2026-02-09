@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getSnippetById } from "../features/snippets/snippetSlice.js";
+import { getSnippetById, updateCode } from "../features/snippets/snippetSlice.js";
 import { motion, AnimatePresence } from "framer-motion";
 import { getProfile } from "../features/auth/authSlice.js";
 
@@ -23,6 +23,10 @@ const SnippetDetail = () => {
     dispatch(getProfile());
   }, [dispatch]);
 
+  const updateCodeHandler = (newCode) => {
+    dispatch(updateCode({ id, code: newCode }));
+  };
+
   if (loading) return <p>Loading snippet...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
   if (!snippet) return <p>No snippet found</p>;
@@ -31,9 +35,8 @@ const SnippetDetail = () => {
 
   return (
     <motion.div
-      className={`min-h-screen font-inter px-4 sm:px-8 py-8 ${
-        isLight ? "bg-white text-zinc-900" : "bg-zinc-950 text-zinc-100"
-      }`}
+      className={`min-h-screen font-inter px-4 sm:px-8 py-8 ${isLight ? "bg-white text-zinc-900" : "bg-zinc-950 text-zinc-100"
+        }`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
@@ -70,11 +73,10 @@ const SnippetDetail = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowExplain(true)}
-                className={`px-4 py-2 rounded-xl transition font-medium ${
-                  isLight
+                className={`px-4 py-2 rounded-xl transition font-medium ${isLight
                     ? "bg-[#562F00] text-white"
                     : "bg-indigo-600 text-white hover:bg-indigo-500"
-                }`}
+                  }`}
               >
                 Explain with AI
               </motion.button>
@@ -83,11 +85,10 @@ const SnippetDetail = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowModal(true)}
-                className={`px-4 py-2 rounded-xl transition ${
-                  isLight
+                className={`px-4 py-2 rounded-xl transition ${isLight
                     ? "border border-zinc-300 hover:bg-zinc-200"
                     : "border border-zinc-700 hover:bg-zinc-800"
-                }`}
+                  }`}
               >
                 Update Snippet
               </motion.button>
@@ -95,19 +96,17 @@ const SnippetDetail = () => {
           </div>
 
           <pre
-            className={`text-sm rounded-xl p-5 overflow-x-auto font-mono shadow-inner ${
-              isLight
+            className={`text-sm rounded-xl p-5 overflow-x-auto font-mono shadow-inner ${isLight
                 ? "bg-white text-zinc-900"
                 : "bg-[#0d1117] text-zinc-100"
-            }`}
+              }`}
           >
             <code>{snippet.code}</code>
           </pre>
 
           <p
-            className={`mt-4 text-sm leading-relaxed ${
-              isLight ? "text-zinc-900" : "text-zinc-300"
-            }`}
+            className={`mt-4 text-sm leading-relaxed ${isLight ? "text-zinc-900" : "text-zinc-300"
+              }`}
           >
             {snippet.description}
           </p>
@@ -115,9 +114,8 @@ const SnippetDetail = () => {
 
         {/* RIGHT PANEL */}
         <motion.div
-          className={`rounded-2xl p-6 shadow-xl min-h-[300px] ${
-            isLight ? "bg-zinc-100" : "bg-zinc-900"
-          }`}
+          className={`rounded-2xl p-6 shadow-xl min-h-[300px] ${isLight ? "bg-zinc-100" : "bg-zinc-900"
+            }`}
           initial={{ x: 40, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
@@ -185,7 +183,14 @@ const SnippetDetail = () => {
                 >
                   Cancel
                 </button>
-                <button className="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-500">
+                <button className="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-500"
+                  onClick={() => {
+                    // Call updateCodeHandler with new code value
+                    const newCode = document.querySelector("textarea").value;
+                    updateCodeHandler(newCode);
+                    setShowModal(false);
+                  }}
+                >
                   Save Changes
                 </button>
               </div>

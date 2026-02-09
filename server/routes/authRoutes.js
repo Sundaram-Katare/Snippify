@@ -4,6 +4,7 @@ import { signup, login, getProfile, switchTheme, setApiKey } from '../controller
 import { validate } from '../middlewares/validate.js';
 import { registerSchema, loginSchema } from '../schemas/authZod.js';
 import { auth } from '../middlewares/authMiddleware.js';
+import { updateCode } from '../controllers/snippetController.js';
 
 const router = express.Router();
 

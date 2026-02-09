@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { Plus, X } from "lucide-react";
+import { Delete, Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createSnippet, getSnippets } from "../features/snippets/snippetSlice.js";
+import { createSnippet, getSnippets, deleteSnippet } from "../features/snippets/snippetSlice.js";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import { Link } from "react-router-dom";
@@ -298,6 +298,8 @@ function SnippetCard({ snippet }) {
     const [addingTag, setAddingTag] = useState(false);
     const [tagInput, setTagInput] = useState("");
 
+    const dispatch = useDispatch();
+
     const addTag = () => {
         if (!tagInput.trim()) return;
 
@@ -307,6 +309,10 @@ function SnippetCard({ snippet }) {
         ]);
         setTagInput("");
         setAddingTag(false);
+    };
+
+    const deleteSnippetHandler = () => {
+      dispatch(deleteSnippet({ id: snippet._id, token: localStorage.getItem("token") }));
     };
 
     return (
@@ -351,10 +357,10 @@ function SnippetCard({ snippet }) {
                 {/* Add tag */}
                 {!addingTag ? (
                     <button
-                        onClick={() => setAddingTag(true)}
+                        onClick={deleteSnippetHandler}
                         className="text-xs text-gray-900 hover:text-black"
                     >
-                        + Add tag
+                        <Delete size={16} />
                     </button>
                 ) : (
                     <div className="flex items-center gap-1">
