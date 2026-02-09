@@ -68,203 +68,228 @@ export default function Snippets() {
     const isLight = authUser?.theme === "light";
 
     return (
-        <div
-            className={`p-8 relative min-h-screen ${isLight ? "bg-[#ffffff] text-gray-900" : "bg-[#000000] text-zinc-100"
-                }`}
+  <div
+    className={`p-8 relative min-h-screen ${
+      isLight
+        ? "bg-[#ffffff] text-gray-900"
+        : "bg-[#000000] text-zinc-100"
+    }`}
+  >
+    {/* Header */}
+    <div className="space-y-4 max-w-5xl">
+      <h1
+        className={`text-4xl font-bold tracking-tight ${
+          isLight ? "text-gray-900" : "text-zinc-100"
+        }`}
+      >
+        My Snippets
+      </h1>
+
+      <p className={isLight ? "text-gray-500 text-sm" : "text-zinc-400 text-sm"}>
+        Store, search, and manage your reusable code snippets.
+      </p>
+
+      <div className="flex flex-col sm:flex-row gap-3">
+        <input
+          type="text"
+          placeholder="Search snippets..."
+          className={`flex-1 px-4 py-3 rounded-lg border transition
+            focus:outline-none focus:ring-2
+            ${
+              isLight
+                ? "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                : "bg-zinc-900 border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:ring-indigo-500 focus:border-indigo-500"
+            }
+          `}
+        />
+
+        <button
+          onClick={() => setOpenAddSnippetModal(true)}
+          className={`flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold transition shadow-sm
+            ${
+              isLight
+                ? "bg-[#562F00] hover:bg-[#6b3a00] text-white"
+                : "bg-indigo-600 hover:bg-indigo-500 text-white"
+            }
+          `}
         >
-            {/* Header */}
-            <div className="space-y-4 max-w-5xl">
-                <h1
-                    className={`text-4xl font-bold tracking-tight ${isLight ? "text-gray-900" : "text-zinc-100"
-                        }`}
+          <Plus size={18} />
+          New Snippet
+        </button>
+      </div>
+
+      {/* Snippets */}
+      <div className="mt-8">
+        {loading && (
+          <p className={isLight ? "text-gray-500" : "text-zinc-400"}>
+            Loading snippets...
+          </p>
+        )}
+        {error && <p className="text-red-500">{error}</p>}
+
+        {snippets.length === 0 && !loading ? (
+          <p className={isLight ? "text-gray-400" : "text-zinc-500"}>
+            No snippets yet. Add one!
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {snippets.map((snippet) => (
+              <SnippetCard key={snippet._id} snippet={snippet} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* Modal */}
+    {openAddSnippetModal && (
+      <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4">
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          className={`w-full max-w-3xl max-h-[85vh] rounded-3xl overflow-hidden
+            ${
+              isLight
+                ? "bg-[#FFFDF1] text-[#3b2a1a]"
+                : "bg-[#121826] text-zinc-100 border border-white/10"
+            }
+          `}
+        >
+          {/* Modal Header */}
+          <div className="flex items-center justify-between px-8 py-6 border-b border-black/10">
+            <h2 className="text-2xl font-semibold">Add New Snippet</h2>
+            <button
+              onClick={() => setOpenAddSnippetModal(false)}
+              className="text-xl opacity-70 hover:opacity-100"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Modal Body */}
+          <form onSubmit={onSubmit} className="flex flex-col h-full">
+            <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+              {/* Title */}
+              <div>
+                <label className="block mb-2 font-medium">Title</label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none
+                    ${
+                      isLight
+                        ? "bg-white border-[#e6d8c3]"
+                        : "bg-black/30 border-white/10"
+                    }
+                  `}
+                  required
+                />
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block mb-2 font-medium">Description</label>
+                <textarea
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      description: e.target.value,
+                    })
+                  }
+                  className={`w-full px-4 py-3 rounded-xl border resize-none focus:outline-none
+                    ${
+                      isLight
+                        ? "bg-white border-[#e6d8c3]"
+                        : "bg-black/30 border-white/10"
+                    }
+                  `}
+                  required
+                />
+              </div>
+
+              {/* Language */}
+              <div>
+                <label className="block mb-2 font-medium">Language</label>
+                <select
+                  value={formData.language}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      language: e.target.value,
+                    })
+                  }
+                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none
+                    ${
+                      isLight
+                        ? "bg-white border-[#e6d8c3]"
+                        : "bg-black/30 border-white/10"
+                    }
+                  `}
                 >
-                    My Snippets
-                </h1>
+                  <option value="javascript">JavaScript</option>
+                  <option value="python">Python</option>
+                  <option value="java">Java</option>
+                  <option value="cpp">C++</option>
+                </select>
+              </div>
 
-                <p className={isLight ? "text-gray-500 text-sm" : "text-zinc-400 text-sm"}>
-                    Store, search, and manage your reusable code snippets.
-                </p>
-
-                <div className="flex flex-col sm:flex-row gap-3">
-                    <input
-                        type="text"
-                        placeholder="Search snippets..."
-                        className={`flex-1 px-4 py-3 rounded-lg border transition
-          focus:outline-none focus:ring-2
-          ${isLight
-                                ? "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
-                                : "bg-zinc-900 border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:ring-indigo-500 focus:border-indigo-500"
-                            }
-        `}
-                    />
-
-                    <button
-                        onClick={() => setOpenAddSnippetModal(true)}
-                        className={`flex items-center justify-center gap-2 
-          px-5 py-3 rounded-lg font-semibold transition shadow-sm
-          ${isLight
-                                ? "bg-[#562F00] hover:bg-[#6b3a00] text-white"
-                                : "bg-indigo-600 hover:bg-indigo-500 text-white"
-                            }
-        `}
-                    >
-                        <Plus size={18} />
-                        New Snippet
-                    </button>
-                </div>
-
-                {/* Snippets */}
-                <div className="mt-8">
-                    {loading && (
-                        <p className={isLight ? "text-gray-500" : "text-zinc-400"}>
-                            Loading snippets...
-                        </p>
-                    )}
-                    {error && <p className="text-red-500">{error}</p>}
-
-                    {snippets.length === 0 && !loading ? (
-                        <p className={isLight ? "text-gray-400" : "text-zinc-500"}>
-                            No snippets yet. Add one!
-                        </p>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {snippets.map((snippet) => (
-                                <SnippetCard key={snippet._id} snippet={snippet} />
-                            ))}
-                        </div>
-                    )}
-                </div>
+              {/* Code */}
+              <div>
+                <label className="block mb-2 font-medium">Code</label>
+                <textarea
+                  rows={5}
+                  value={formData.code}
+                  onChange={(e) =>
+                    setFormData({ ...formData, code: e.target.value })
+                  }
+                  placeholder="Paste or write your code here..."
+                  className={`w-full px-4 py-4 rounded-xl border font-mono text-sm resize-y focus:outline-none
+                    ${
+                      isLight
+                        ? "bg-white border-[#e6d8c3]"
+                        : "bg-black/40 border-white/10 text-zinc-100"
+                    }
+                  `}
+                  required
+                />
+              </div>
             </div>
 
-            {/* Modal */}
-            {openAddSnippetModal && (
-                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4">
-                    <motion.div
-                        initial={{ scale: 0.95, opacity: 0, y: 20 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        transition={{ duration: 0.25, ease: "easeOut" }}
-                        className={`w-full max-w-2xl rounded-2xl shadow-xl ${isLight ? "bg-white" : "bg-zinc-900 border border-zinc-800"
-                            }`}
-                    >
-                        {/* Modal Header */}
-                        <div
-                            className={`flex items-center justify-between px-6 py-4 border-b ${isLight ? "border-gray-200" : "border-zinc-800"
-                                }`}
-                        >
-                            <h2
-                                className={`text-xl font-bold ${isLight ? "text-gray-900" : "text-zinc-100"
-                                    }`}
-                            >
-                                Add New Snippet
-                            </h2>
+            {/* Modal Footer */}
+            <div className="flex justify-end gap-4 px-8 py-6 border-t border-black/10">
+              <button
+                type="button"
+                onClick={() => setOpenAddSnippetModal(false)}
+                className={`px-6 py-3 rounded-xl ${
+                  isLight ? "bg-[#e6d8c3]" : "bg-white/10"
+                }`}
+              >
+                Cancel
+              </button>
 
-                            <button
-                                onClick={() => setOpenAddSnippetModal(false)}
-                                className={`p-2 rounded-full transition ${isLight ? "hover:bg-gray-100" : "hover:bg-zinc-800"
-                                    }`}
-                            >
-                                <X size={20} />
-                            </button>
-                        </div>
-
-                        {/* Form */}
-                        <form onSubmit={onSubmit} className="p-6 space-y-5">
-                            {/* Title */}
-                            <div className="space-y-1">
-                                <label
-                                    className={`text-sm font-semibold ${isLight ? "text-gray-700" : "text-zinc-300"
-                                        }`}
-                                >
-                                    Title
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.title}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, title: e.target.value })
-                                    }
-                                    className={`w-full px-4 py-2.5 rounded-lg border
-                focus:outline-none focus:ring-2
-                ${isLight
-                                            ? "border-gray-300 bg-white text-gray-900 focus:ring-blue-500"
-                                            : "border-zinc-700 bg-zinc-800 text-zinc-100 focus:ring-indigo-500"
-                                        }
-              `}
-                                    required
-                                />
-                            </div>
-
-                            {/* Description */}
-                            <div className="space-y-1">
-                                <label
-                                    className={`text-sm font-semibold ${isLight ? "text-gray-700" : "text-zinc-300"
-                                        }`}
-                                >
-                                    Description
-                                </label>
-                                <textarea
-                                    rows={3}
-                                    value={formData.description}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, description: e.target.value })
-                                    }
-                                    className={`w-full px-4 py-2.5 rounded-lg border
-                focus:outline-none focus:ring-2
-                ${isLight
-                                            ? "border-gray-300 bg-white text-gray-900 focus:ring-blue-500"
-                                            : "border-zinc-700 bg-zinc-800 text-zinc-100 focus:ring-indigo-500"
-                                        }
-              `}
-                                    required
-                                />
-                            </div>
-
-                            {/* Language */}
-                            <div className="space-y-1">
-                                <label
-                                    className={`text-sm font-semibold ${isLight ? "text-gray-700" : "text-zinc-300"
-                                        }`}
-                                >
-                                    Language
-                                </label>
-                                <select
-                                    value={formData.language}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, language: e.target.value })
-                                    }
-                                    className={`w-full px-4 py-2.5 rounded-lg border
-                focus:outline-none focus:ring-2
-                ${isLight
-                                            ? "bg-white border-gray-300 focus:ring-blue-500"
-                                            : "bg-zinc-800 border-zinc-700 text-zinc-100 focus:ring-indigo-500"
-                                        }
-              `}
-                                >
-                                    <option value="javascript">JavaScript</option>
-                                    <option value="python">Python</option>
-                                    <option value="java">Java</option>
-                                    <option value="cpp">C++</option>
-                                </select>
-                            </div>
-
-                            {/* Submit */}
-                            <div className="pt-2 flex justify-end">
-                                <button
-                                    type="submit"
-                                    className={`px-6 py-2.5 rounded-lg font-semibold transition shadow-sm ${isLight
-                                            ? "bg-blue-600 hover:bg-blue-700 text-white"
-                                            : "bg-indigo-600 hover:bg-indigo-500 text-white"
-                                        }`}
-                                >
-                                    Save Snippet
-                                </button>
-                            </div>
-                        </form>
-                    </motion.div>
-                </div>
-            )}
-        </div>
-    );
+              <button
+                type="submit"
+                className={`px-6 py-3 rounded-xl font-semibold ${
+                  isLight
+                    ? "bg-[#5C3600] text-[#FFFDF1]"
+                    : "bg-white text-black"
+                }`}
+              >
+                Save Snippet
+              </button>
+            </div>
+          </form>
+        </motion.div>
+      </div>
+    )}
+  </div>
+);
 }
 
 

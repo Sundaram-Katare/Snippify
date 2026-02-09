@@ -32,7 +32,7 @@ export default function Navbar() {
 
   return (
     <div
-      className={`flex items-center justify-center w-full ${isLight ? "bg-[#ffffff]" : "bg-black"
+      className={`flex items-center justify-center w-full ${isLight ? "bg-[#FFFDF1]" : "bg-black"
         }`}
     >
       <nav

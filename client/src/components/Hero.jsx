@@ -27,7 +27,7 @@ export default function Hero() {
     p-6 sm:p-10 lg:p-16
     mx-auto max-w-7xl
     ${isLight
-                        ? "bg-transparent"
+                        ? "bg-[transparent]"
                         : "relative bg-gradient-to-br from-[#05070d] via-[#0b1220] to-[#020617]"
                     }
   `}

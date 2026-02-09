@@ -11,19 +11,19 @@ export default function Home() {
     const dispatch = useDispatch();
     const { user, loading } = useSelector((state) => state.auth);
 
-    useEffect(() => {
-        if(!user) {
-            dispatch(getProfile());
-        }
-    }, [dispatch, user]);
+    // useEffect(() => {
+    //     if(!user) {
+    //         dispatch(getProfile());
+    //     }
+    // }, [dispatch, user]);
 
-    if (loading) return <p>Loading profile...</p>;
+    // if (loading) return <p>Loading profile...</p>;
 
     const isLight = user?.theme === 'light';
 
     return (
         <>
-            <div className={`${user?.theme == "light" ? "bg-[#ffffff]" : "bg-[#000000]" } dark:bg-black`}>
+            <div className={`${user?.theme == "light" ? "bg-[#FFFDF1]" : "bg-[#000000]" } dark:bg-black`}>
                 {/* <Navbar toggleSidebar={toggleSidebar} /> */}
                 <Hero />
                 {/* <Features /> */}

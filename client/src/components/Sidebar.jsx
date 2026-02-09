@@ -12,12 +12,12 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       {/* Top Section */}
       <div>
         <div className="relative flex items-center justify-between px-4 py-6">
-          <h1 className={`text-[#61B8FF] font-bold text-xl transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0"}`}>
+          <h1 className={`text-[#562F00] font-bold text-xl transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0"}`}>
             Snippify
           </h1>
           <button
             onClick={toggleSidebar}
-            className={`text-[#562F00] text-xl ${!isOpen ? "absolute left-0": ""}`}
+            className={`text-[#562F00] bg-black rounded-full ml-2 text-xl ${!isOpen ? "absolute left-0": ""}`}
           >
             {isOpen ? <FiChevronLeft size={36} color="orange" /> : <FiChevronRight size={36} color="orange" />}
           </button>
