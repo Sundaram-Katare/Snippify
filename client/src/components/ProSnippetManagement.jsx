@@ -8,7 +8,7 @@ const ProSnippetManagement = ({ isLight }) => {
         px-6 sm:px-10 lg:px-20 py-24
         ${
           isLight
-            ? "bg-[#f9fafb]"
+            ? "bg-[#FFFDF1]"
             : "bg-gradient-to-br from-[#05070d] via-[#0b1220] to-[#020617]"
         }
       `}

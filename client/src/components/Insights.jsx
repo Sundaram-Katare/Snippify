@@ -20,7 +20,7 @@ export default function Insights() {
     relative overflow-hidden font-inter
     px-6 sm:px-10 lg:px-20 py-20
     ${isLight
-                        ? "bg-white"
+                        ? "bg-[#FFFDF1]"
                         : "bg-gradient-to-br from-[#05070d] via-[#0b1220] to-[#020617]"
                     }
   `}
@@ -78,7 +78,7 @@ export default function Insights() {
           `}
                             >
                                 <img
-                                    src="https://d5jbouauxtwah.cloudfront.net/eyJidWNrZXQiOiJrbm93bGVkZ2VodXQtcHJlcG8tbGl2ZSIsImtleSI6InR1dG9yaWFsc1wvdG9waWNzXC9pbWFnZXNcLzE2OTg0MDIzOTI4NTgtMTY5ODQwMjM5Mjg1OC5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsiZml0IjoiY292ZXIifX19"
+                                    src="hero6.png"
                                     alt="AI Code Explanation"
                                     className="h-[320px] sm:h-[420px] lg:h-[500px] object-cover"
                                 />
@@ -119,7 +119,7 @@ export default function Insights() {
                                     className={`
               p-6 rounded-2xl transition
               ${isLight
-                                            ? "bg-gray-50 border border-gray-200"
+                                            ? "bg-[#562F00] border border-gray-200"
                                             : "bg-white/5 backdrop-blur border border-white/10 hover:border-indigo-500/40"
                                         }
             `}
@@ -128,7 +128,7 @@ export default function Insights() {
                                         className={`
                 text-xl font-semibold mb-2
                 ${isLight
-                                                ? "text-black"
+                                                ? "text-white"
                                                 : "text-white"
                                             }
               `}
@@ -138,7 +138,7 @@ export default function Insights() {
                                     <p
                                         className={
                                             isLight
-                                                ? "text-gray-600"
+                                                ? "text-[#FFCE99]"
                                                 : "text-zinc-400"
                                         }
                                     >

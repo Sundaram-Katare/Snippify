@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getProfile, logout, switchTheme } from "../features/auth/authSlice";
 import { useEffect } from "react";
+import { LogOut } from "lucide-react";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -104,7 +105,7 @@ export default function Navbar() {
                   }
             `}
               >
-                Logout
+                <LogOut size={24}/>
               </button>
             </div>
           </div>

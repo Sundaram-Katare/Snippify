@@ -6,7 +6,7 @@ import { Code, LayoutDashboard, Settings, User } from "lucide-react";
 export default function Sidebar({ isOpen, toggleSidebar }) {
   return (
     <div
-      className={`bg-[#FFCE99] text-black h-full transition-all duration-300
+      className={`bg-[#FFCE99] text-black h-[100vh] transition-all duration-300
         ${isOpen ? "w-64" : "w-16"} flex flex-col justify-between`}
     >
       {/* Top Section */}
@@ -48,7 +48,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       </div>
 
       {/* Bottom Section */}
-      <div className="px-4 py-6 text-sm text-gray-400">
+      <div className="px-4 py-6 text-sm text-[black]">
         {isOpen ? "Save it once, use it forever." : "💾"}
       </div>
     </div>

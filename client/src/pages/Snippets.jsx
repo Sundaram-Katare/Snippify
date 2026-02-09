@@ -90,7 +90,7 @@ export default function Snippets() {
       </p>
 
       <div className="flex flex-col sm:flex-row gap-3">
-        <input
+        {/* <input
           type="text"
           placeholder="Search snippets..."
           className={`flex-1 px-4 py-3 rounded-lg border transition
@@ -101,7 +101,7 @@ export default function Snippets() {
                 : "bg-zinc-900 border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:ring-indigo-500 focus:border-indigo-500"
             }
           `}
-        />
+        /> */}
 
         <button
           onClick={() => setOpenAddSnippetModal(true)}

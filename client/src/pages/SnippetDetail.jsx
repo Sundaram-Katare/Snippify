@@ -222,7 +222,7 @@ const SnippetDetail = () => {
       </div>
 
       <div className="mt-16">
-         <h1 className="text-center text-black text-2xl">NOTE: The explanation will disappear when the page is refreshed.</h1>
+         <h1 className="text-center text-black md:text-2xl"><strong>NOTE:</strong> The explanation will disappear when the page is refreshed.</h1>
       </div>
 
       {/* MODAL */}
