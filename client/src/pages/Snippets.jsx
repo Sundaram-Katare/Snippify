@@ -143,19 +143,19 @@ export default function Snippets() {
 
     {/* Modal */}
     {openAddSnippetModal && (
-      <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4">
-        <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
-          className={`w-full max-w-3xl max-h-[85vh] rounded-3xl overflow-hidden
-            ${
-              isLight
-                ? "bg-[#FFFDF1] text-[#3b2a1a]"
-                : "bg-[#121826] text-zinc-100 border border-white/10"
-            }
-          `}
-        >
+  <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm overflow-y-auto px-4 py-6 flex items-start sm:items-center justify-center">
+    <motion.div
+      initial={{ scale: 0.95, opacity: 0, y: 20 }}
+      animate={{ scale: 1, opacity: 1, y: 0 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className={`w-full max-w-3xl rounded-3xl flex flex-col max-h-[90vh]
+        ${
+          isLight
+            ? "bg-[#FFFDF1] text-[#3b2a1a]"
+            : "bg-[#121826] text-zinc-100 border border-white/10"
+        }
+      `}
+    >
           {/* Modal Header */}
           <div className="flex items-center justify-between px-8 py-6 border-b border-black/10">
             <h2 className="text-2xl font-semibold">Add New Snippet</h2>
