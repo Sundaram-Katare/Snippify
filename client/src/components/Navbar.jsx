@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getProfile, logout, switchTheme } from "../features/auth/authSlice";
 import { useEffect } from "react";
-import { LogOut } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -87,12 +87,12 @@ export default function Navbar() {
                 className={`
               px-4 py-2 rounded-xl text-sm font-medium transition
               ${isLight
-                    ? "bg-[#61B8FF] text-black hover:bg-[#4aa9f5]"
-                    : "bg-indigo-600 text-white hover:bg-indigo-500"
+                    ? "bg- text-black "
+                    : "bg- text-white "
                   }
             `}
               >
-                Switch Theme
+                {isLight ? <Moon className="hover:scale-[1.05]" /> : <Sun />}
               </button>
 
               <button

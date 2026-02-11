@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Delete, Plus, X } from "lucide-react";
+import { Delete, DeleteIcon, Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSnippet, getSnippets, deleteSnippet } from "../features/snippets/snippetSlice.js";
@@ -16,6 +16,7 @@ import "prismjs/components/prism-cpp";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-java";
 import { getProfile } from "../features/auth/authSlice.js";
+import { FiDelete } from "react-icons/fi";
 
 
 const TAG_COLORS = [
@@ -71,7 +72,7 @@ export default function Snippets() {
   <div
     className={`p-8 relative min-h-screen ${
       isLight
-        ? "bg-[#ffffff] text-gray-900"
+        ? "bg-[#FFFDF1] text-gray-900"
         : "bg-[#000000] text-zinc-100"
     }`}
   >
@@ -108,7 +109,7 @@ export default function Snippets() {
           className={`flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold transition shadow-sm
             ${
               isLight
-                ? "bg-[#562F00] hover:bg-[#6b3a00] text-white"
+                ? "bg-[#FF9644] hover:scale-[1.05] text-black"
                 : "bg-indigo-600 hover:bg-indigo-500 text-white"
             }
           `}
@@ -318,7 +319,7 @@ function SnippetCard({ snippet }) {
     return (
         <motion.div
             whileHover={{ y: -4 }}
-            className="rounded-xl p-4 shadow-md bg-[#FFFDF1] text-black relative"
+            className="rounded-xl p-4 shadow-md bg-[#562F00] text-white relative"
         >
             {/* Title */}
             <h3 className="font-semibold text-lg truncate">
@@ -326,7 +327,7 @@ function SnippetCard({ snippet }) {
             </h3>
 
             {/* Description */}
-            <p className="text-sm text-gray-900 mt-1 line-clamp-2">
+            <p className="text-sm text-gray-100 mt-1 line-clamp-2">
                 {snippet.description}
             </p>
 
@@ -349,7 +350,7 @@ function SnippetCard({ snippet }) {
                     to={`/snippets/${snippet._id}`}
                     target="_blank"
                     className="text-sm font-semibold px-3 py-1.5 
-            rounded-md bg-[#562F00] hover:bg-[#562F00] text-white transition"
+            rounded-md bg-[#FFFDF1] hover:bg-[#FFFDF1] text-black transition"
                 >
                     View
                 </Link>
@@ -360,7 +361,7 @@ function SnippetCard({ snippet }) {
                         onClick={deleteSnippetHandler}
                         className="text-xs text-gray-900 hover:text-black"
                     >
-                        <Delete size={16} />
+                        <FiDelete color="white" size={24} />
                     </button>
                 ) : (
                     <div className="flex items-center gap-1">

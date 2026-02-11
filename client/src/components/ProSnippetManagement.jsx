@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { CloudSync, Folders } from "lucide-react";
 
 const ProSnippetManagement = ({ isLight }) => {
   return (
@@ -62,7 +63,7 @@ const ProSnippetManagement = ({ isLight }) => {
             {
               title: "Smart Organization",
               desc: "Group snippets by language, tags, or use-case so everything stays exactly where you expect.",
-              icon: "📂",
+              icon: <Folders size={36} />,
             },
             {
               title: "Instant Search",
@@ -72,7 +73,7 @@ const ProSnippetManagement = ({ isLight }) => {
             {
               title: "Always in Sync",
               desc: "Your snippets are available everywhere you code, whenever you need them.",
-              icon: "🔄",
+              icon: <CloudSync size={36} />,
             },
           ].map((item, idx) => (
             <motion.div
@@ -85,21 +86,21 @@ const ProSnippetManagement = ({ isLight }) => {
                 p-6 rounded-2xl transition-all
                 ${
                   isLight
-                    ? "bg-white border border-gray-200 shadow-sm"
+                    ? "bg-[#562F00] border border-gray-200 text-white shadow-sm"
                     : "bg-white/5 backdrop-blur border border-white/10 hover:border-indigo-500/40"
                 }
               `}
             >
-              <div className="text-3xl mb-4">{item.icon}</div>
+              <div className="text-3xl mb-4 text-center self-center">{item.icon}</div>
               <h3
                 className={`
                   text-xl font-semibold mb-2
-                  ${isLight ? "text-black" : "text-white"}
+                  ${isLight ? "text-[#FFCE99]" : "text-white"}
                 `}
               >
                 {item.title}
               </h3>
-              <p className={isLight ? "text-gray-600" : "text-zinc-400"}>
+              <p className={isLight ? "text-gray-100" : "text-zinc-400"}>
                 {item.desc}
               </p>
             </motion.div>

@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar.jsx"
 import { useEffect } from "react"
 import { getProfile } from "../features/auth/authSlice.js"
 import ProSnippetManagement from "../components/ProSnippetManagement.jsx"
+import GeminiNotice from "../components/Notice.jsx"
 
 export default function Home() {
     const dispatch = useDispatch();
@@ -28,6 +29,7 @@ export default function Home() {
                 <Hero />
                 {/* <Features /> */}
                 <Insights />
+                <GeminiNotice isLight={isLight} />
                 <ProSnippetManagement isLight={isLight} />
             </div>
         </>
