@@ -123,7 +123,11 @@ const snippetSlice = createSlice({
     error: null,
     explanation: null,
   },
-  reducers: {},
+  reducers: {
+    clearExplainError: (state) => {
+      state.error = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createSnippet.pending, (state) => {
@@ -222,7 +226,11 @@ const snippetSlice = createSlice({
       })
       .addCase(explainCode.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        if (action.payload?.code === "NO_API_KEY" || action.payload?.code === "EXPIRED_API_KEY" || action.payload?.code === "INVALID_API_KEY") {
+          state.error = null;
+        } else {
+          state.error = action.payload;
+        }
       });
   },
 });
