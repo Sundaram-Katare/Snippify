@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Async thunk for creating a snippet
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/api/";
+
 export const createSnippet = createAsyncThunk(
   "snippets/create",
   async ({ formData, token }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/snippets/",
+        `${BACKEND_URL}snippets/`,
         formData, // body
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -24,11 +25,10 @@ export const getSnippets = createAsyncThunk(
   "snippets/get",
   async ({ token }, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:3000/api/snippets", {
+      const response = await axios.get(`${BACKEND_URL}snippets`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      console.log(response);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data?.message);
@@ -40,7 +40,7 @@ export const updateSnippet = createAsyncThunk(
   "snippets/updateSnippet",
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      const res = await axios.put(`/api/snippets/${id}`, data);
+      const res = await axios.put(`${BACKEND_URL}snippets/${id}`, data);
       return res.data.updated;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || err.message);
@@ -52,7 +52,7 @@ export const getSnippetById = createAsyncThunk(
   "snippets/getById",
   async ({ id, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/snippets/${id}`, {
+      const response = await axios.get(`${BACKEND_URL}snippets/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -67,7 +67,7 @@ export const updateCode = createAsyncThunk(
   async ({ id, code }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.patch(`http://localhost:3000/api/snippets/${id}`, { code }, {
+      const res = await axios.patch(`${BACKEND_URL}snippets/${id}`, { code }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       return res.data;
@@ -82,7 +82,7 @@ export const deleteSnippet = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.delete(`http://localhost:3000/api/snippets/${id}`, {
+      const res = await axios.delete(`${BACKEND_URL}snippets/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       return res.data;
@@ -98,7 +98,7 @@ export const explainCode = createAsyncThunk(
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `http://localhost:3000/api/snippets/explain/${id}`,
+        `${BACKEND_URL}snippets/explain/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

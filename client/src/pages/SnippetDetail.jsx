@@ -27,6 +27,7 @@ const SnippetDetail = () => {
 
   const updateCodeHandler = (newCode) => {
     dispatch(updateCode({ id, code: newCode }));
+    toast.success("Snippet updated successfully!");
   };
 
   const handleExplainCode = async () => {

@@ -68,7 +68,6 @@ export default function Snippets() {
         });
     };
 
-    console.log(authUser);
     const isLight = authUser?.theme === "light";
 
     return (

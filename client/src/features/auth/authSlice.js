@@ -10,11 +10,13 @@ const initialState = {
   error: null,
 };
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/api/";
+
 export const signupUser = createAsyncThunk(
   "auth/signup",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/signup", userData);
+      const response = await axios.post(`${BACKEND_URL}auth/signup`, userData);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem('user', response.data);
       return response.data;
@@ -31,7 +33,7 @@ export const getProfile = createAsyncThunk(
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:3000/api/auth/profile",
+        `${BACKEND_URL}auth/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,7 +53,7 @@ export const loginUser = createAsyncThunk(
   "auth/login",
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/login", credentials);
+      const response = await axios.post(`${BACKEND_URL}auth/login`, credentials);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem('user', response.data);
       return response.data;
@@ -66,11 +68,9 @@ export const switchTheme = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      console.log("Token", token);
-      const res = await axios.patch("http://localhost:3000/api/auth/theme", {}, {
+      const res = await axios.patch(`${BACKEND_URL}auth/theme`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      console.log(res);
       return res.data.user;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -83,12 +83,10 @@ export const updateApiKey = createAsyncThunk(
   async (apiKey, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      console.log();
 
-      const res = await axios.patch('http://localhost:3000/api/auth/key', apiKey, {
+      const res = await axios.patch(`${BACKEND_URL}auth/key`, apiKey, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      console.log(res);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);

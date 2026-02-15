@@ -20,7 +20,6 @@ export default function Navbar() {
   }, [dispatch]);
 
   const changeTheme = () => {
-    console.log("Hello");
     dispatch(switchTheme());
   };
 

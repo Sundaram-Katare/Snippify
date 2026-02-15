@@ -6,7 +6,6 @@ import { decryptApiKey } from "../utils/crypto.js";
 // @desc Create snippet
 export const createSnippet = async (req, res) => {
   try {
-    console.log(req.userId);
     const snippet = await Snippet.create({
       ...req.body,
       userId: req.userId,
@@ -26,7 +25,6 @@ export const createSnippet = async (req, res) => {
 
 export const getSnippets = async (req, res) => {
   try {
-    console.log(req.userId);
     const snippets = await Snippet.find({ userId: req.userId });
     res.json(snippets);
   } catch (err) {
