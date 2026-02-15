@@ -17,6 +17,7 @@ import "prismjs/components/prism-python";
 import "prismjs/components/prism-java";
 import { getProfile } from "../features/auth/authSlice.js";
 import { FiDelete } from "react-icons/fi";
+import Navbar from "../components/Navbar.jsx";
 
 
 const TAG_COLORS = [
@@ -76,6 +77,8 @@ export default function Snippets() {
         : "bg-[#000000] text-zinc-100"
     }`}
   >
+
+    <Navbar />
     {/* Header */}
     <div className="space-y-4 max-w-5xl">
       <h1

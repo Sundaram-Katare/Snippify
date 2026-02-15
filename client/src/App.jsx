@@ -22,10 +22,10 @@ function AppContent() {
   const { token } = useSelector((state) => state.auth);
 
   // Sidebar should not show on home or auth
-  const showSidebar = location.pathname !== "/" && location.pathname !== "/auth";
+  const showSidebar = location.pathname !== "/" && location.pathname !== "/auth" ;
 
   // Navbar should not show on profile
-  const showNavbar = location.pathname !== "/profile";
+  const showNavbar = location.pathname !== "/profile" && location.pathname !== "/snippets" && location.pathname !== "/dashboard";
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -36,7 +36,7 @@ function AppContent() {
   }, [token, dispatch]);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-full">
       {showSidebar && <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />}
       <div className={`flex-1 flex flex-col ${showSidebar ? '' : 'w-full'}`}>
         {showNavbar && <Navbar toggleSidebar={toggleSidebar} />}
