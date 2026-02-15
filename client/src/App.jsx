@@ -13,6 +13,7 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Snippets from "./pages/Snippets";
 import SnippetDetail from "./pages/SnippetDetail";
+import { Toaster } from "react-hot-toast";
 
 // Create a wrapper component to handle sidebar logic
 function AppContent() {
@@ -56,6 +57,7 @@ function AppContent() {
 function App() {
   return (
     <Router>
+      <Toaster position="top-right" />
       <AppContent />
     </Router>
   );

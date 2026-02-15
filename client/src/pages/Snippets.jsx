@@ -18,6 +18,7 @@ import "prismjs/components/prism-java";
 import { getProfile } from "../features/auth/authSlice.js";
 import { FiDelete } from "react-icons/fi";
 import Navbar from "../components/Navbar.jsx";
+import toast from "react-hot-toast";
 
 
 const TAG_COLORS = [
@@ -57,6 +58,7 @@ export default function Snippets() {
     const onSubmit = (e) => {
         e.preventDefault();
         dispatch(createSnippet({ formData, token }));
+        toast.success("Snippet created successfully!");
         setOpenAddSnippetModal(false);
         setFormData({
             title: "",

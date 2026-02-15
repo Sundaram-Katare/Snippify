@@ -1,7 +1,7 @@
 import Snippet from "../models/snippetModel.js";
 import User from "../models/userModel.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
+import { decryptApiKey } from "../utils/crypto.js";
 
 // @desc Create snippet
 export const createSnippet = async (req, res) => {
@@ -86,16 +86,31 @@ export const explainCode = async (req, res) => {
     const user = await User.findById(userId);
 
     const code = req.params.id ? (await Snippet.findById(req.params.id)).code : req.body.code;
-    
+
     if (!user || !user.geminiApiKey || user.geminiApiKey === "key") {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: "Please Add Gemini API Key",
         code: "NO_API_KEY"
       });
     }
 
-    // Initialize Gemini API
-    const genAI = new GoogleGenerativeAI(user.geminiApiKey);
+    let decryptedApiKey;
+    try {
+      if (user.geminiApiKey.includes(':')) {
+        decryptedApiKey = decryptApiKey(user.geminiApiKey);
+      } else {
+        console.warn(`[SECURITY] Warning: API key stored as plain text for user ${userId}. Consider updating.`);
+        decryptedApiKey = user.geminiApiKey;
+      }
+    } catch (err) {
+      console.error("Decryption failed:", err);
+      return res.status(400).json({
+        error: "Invalid or corrupted API key",
+        code: "INVALID_API_KEY"
+      });
+    }
+
+    const genAI = new GoogleGenerativeAI(decryptedApiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     // Create the prompt
@@ -113,7 +128,7 @@ Provide the explanation in a JSON format like this:
     const result = await model.generateContent(prompt);
     const response = result.response;
     const text = response.text();
-    
+
     // Parse the JSON response
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
@@ -122,23 +137,23 @@ Provide the explanation in a JSON format like this:
 
     const explanation = JSON.parse(jsonMatch[0]);
 
-    res.status(200).json({ 
+    res.status(200).json({
       explanation: explanation.explanation,
       message: "Code explained successfully"
     });
 
   } catch (err) {
     console.error("Error explaining code:", err);
-    
+
     // Check for API key expiration or invalid key
     if (err.message.includes("API key") || err.message.includes("403")) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         error: "Gemini API key is expired, Please add another key",
         code: "EXPIRED_API_KEY"
       });
     }
 
-    res.status(500).json({ 
+    res.status(500).json({
       error: err.message || "Failed to explain code"
     });
   }

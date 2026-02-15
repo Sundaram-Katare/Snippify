@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
+import { encryptApiKey } from "../utils/crypto.js";
 
 export const signup = async (req, res) => {
   try {
@@ -109,13 +110,29 @@ export const switchTheme = async (req, res) => {
 export const setApiKey = async (req, res) => {
   try {
     const userId = req.userId;
+    const { apiKey } = req.body;
 
-    const {apiKey} = req.body;
+    if (!apiKey || apiKey.trim() === '') {
+      return res.status(400).json({ message: "API Key cannot be empty" });
+    }
 
-    const user = await User.findByIdAndUpdate(userId,{ geminiApiKey: apiKey}, { new: true });
+    const encryptedApiKey = encryptApiKey(apiKey);
 
-    return res.status(200).json({ message: "Updated API Key", user});
+    const user = await User.findByIdAndUpdate(
+      userId, 
+      { geminiApiKey: encryptedApiKey }, 
+      { new: true }
+    );
+
+    return res.status(200).json({ 
+      message: "Updated API Key", 
+      user: {
+        ...user.toObject(),
+        geminiApiKey: "••••••••••••••••" 
+      }
+    });
   } catch (err) {
+    console.error("Set API Key Error:", err);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
