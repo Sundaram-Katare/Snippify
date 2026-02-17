@@ -14,6 +14,7 @@ import Navbar from "./components/Navbar";
 import Snippets from "./pages/Snippets";
 import SnippetDetail from "./pages/SnippetDetail";
 import { Toaster } from "react-hot-toast";
+import { Analytics } from "@vercel/analytics/next"
 
 // Create a wrapper component to handle sidebar logic
 function AppContent() {
@@ -23,7 +24,7 @@ function AppContent() {
   const { token } = useSelector((state) => state.auth);
 
   // Sidebar should not show on home or auth
-  const showSidebar = location.pathname !== "/" && location.pathname !== "/auth" ;
+  const showSidebar = location.pathname !== "/" && location.pathname !== "/auth";
 
   // Navbar should not show on profile
   const showNavbar = location.pathname !== "/profile" && location.pathname !== "/snippets" && location.pathname !== "/dashboard";
@@ -56,10 +57,13 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <Toaster position="top-right" />
-      <AppContent />
-    </Router>
+    <>
+      <Router>
+        <Toaster position="top-right" />
+        <AppContent />
+        <Analytics />
+      </Router>
+    </>
   );
 }
 
