@@ -46,6 +46,7 @@
 
 ## Preview:- 
 <img width="1915" height="910" alt="image" src="https://github.com/user-attachments/assets/1570733e-1a1e-4953-b7b7-1a11af905a63" />
+<img width="1900" height="917" alt="image" src="https://github.com/user-attachments/assets/98cd43b1-4c1f-49eb-81b6-be96d040c2b1" />
 
 ---
 
